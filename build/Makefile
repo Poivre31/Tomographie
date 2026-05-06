@@ -129,6 +129,30 @@ IRM/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/IRM.dir/build.make CMakeFiles/IRM.dir/build
 .PHONY : IRM/fast
 
+complex_matrix.o: complex_matrix.cpp.o
+.PHONY : complex_matrix.o
+
+# target to build an object file
+complex_matrix.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/IRM.dir/build.make CMakeFiles/IRM.dir/complex_matrix.cpp.o
+.PHONY : complex_matrix.cpp.o
+
+complex_matrix.i: complex_matrix.cpp.i
+.PHONY : complex_matrix.i
+
+# target to preprocess a source file
+complex_matrix.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/IRM.dir/build.make CMakeFiles/IRM.dir/complex_matrix.cpp.i
+.PHONY : complex_matrix.cpp.i
+
+complex_matrix.s: complex_matrix.cpp.s
+.PHONY : complex_matrix.s
+
+# target to generate assembly for a file
+complex_matrix.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/IRM.dir/build.make CMakeFiles/IRM.dir/complex_matrix.cpp.s
+.PHONY : complex_matrix.cpp.s
+
 image.o: image.cpp.o
 .PHONY : image.o
 
@@ -186,6 +210,9 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... IRM"
+	@echo "... complex_matrix.o"
+	@echo "... complex_matrix.i"
+	@echo "... complex_matrix.s"
 	@echo "... image.o"
 	@echo "... image.i"
 	@echo "... image.s"

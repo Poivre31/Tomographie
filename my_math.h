@@ -2,6 +2,21 @@
 #include <math.h>
 #include <iostream>
 #include <functional>
+#include <complex>
+#include "image.h"
+
+using namespace std::complex_literals;
+using complex = std::complex<double>;
+
+// std::vector<double> modulus(std::vector<complex> data)
+// {
+//     std::vector<double> result(data.size());
+//     for (size_t i = 0; i < data.size(); i++)
+//     {
+//         result[i] = abs(data[i]);
+//     }
+//     return result;
+// }
 
 struct vec2
 {

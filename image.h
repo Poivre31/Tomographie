@@ -3,17 +3,13 @@
 #include <vector>
 #include <iostream>
 #include <fstream>
-#include <bitset>
+#include <memory>
+#include <functional>
 
 class image
 {
 public:
     image(size_t width, size_t height);
-
-    ~image();
-
-    // Image should always be passed by reference
-    image(const image &) = delete;
 
     size_t width();
 
@@ -32,6 +28,8 @@ public:
     /// @brief Saves the image to `path` as a txt file containing line by line: width, then height, then all values in row major order
     /// @param path without the extension
     void save(std::string path);
+
+    void apply_elementwise(std::function<double(double)> f);
 
     /// @brief Fills the entire image with `value`
     void fill_uniform(double value);
@@ -52,5 +50,5 @@ public:
 private:
     size_t _width;
     size_t _height;
-    double *_data = nullptr;
+    std::shared_ptr<double[]> _data;
 };

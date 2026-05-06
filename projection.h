@@ -4,7 +4,7 @@
 #include <vector>
 #include <algorithm>
 #include <cmath>
-#include "math.h"
+#include "my_math.h"
 
 struct vec2i
 {

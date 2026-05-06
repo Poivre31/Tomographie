@@ -10,19 +10,42 @@ timer t;
 
 int main()
 {
-    size_t n = 1 << 24;
+    size_t n = 1024;
     size_t a = 32;
-    std::vector<double> aperture(n);
-    for (size_t i = 0; i < n; i++)
+
+    complex_matrix aperture(n, n);
+
+    for (size_t i = 1; i <= n; i++)
     {
-        if (abs(i - n / 2.) < a)
-            aperture[i] = 1;
-        else
-            aperture[i] = 0;
+        for (size_t j = 1; j <= n; j++)
+        {
+            if ((i - n / 2.) * (i - n / 2.) + (j - n / 2.) * (j - n / 2.) < a * a)
+                aperture.set(i, j, 1);
+            else
+                aperture.set(i, j, 0);
+        }
     }
+
     t.start_watch();
-    auto datafft = fft_shift(modulo(fft(aperture)));
+    auto im = fft_2D_shift(fft_2D(aperture)).modulus_to_image();
     t.print_ellapsed_time();
+
+    im.apply_elementwise([](double x)
+                         { return pow(x, 1. / 2.2); });
+    im.save("fft_2D");
+    system("python ../display_image.py fft_2D.txt");
+
+    // std::vector<double> aperture(n);
+    // for (size_t i = 0; i < n; i++)
+    // {
+    //     if (abs(i - n / 2.) < a)
+    //         aperture[i] = 1;
+    //     else
+    //         aperture[i] = 0;
+    // }
+    // t.start_watch();
+    // auto datafft = fft_shift(modulus(fft(aperture)));
+    // t.print_ellapsed_time();
 
     // save_vector(aperture, "data1");
     // system("python ../display_plot.py data1.txt");
@@ -41,6 +64,7 @@ int main()
 
     ray my_ray({9, 32}, {2., 1.2});
 
+    t.start_watch();
     size_t n_theta = size;
     size_t n_s = size;
     image projection(n_theta, n_s);
@@ -55,6 +79,8 @@ int main()
             projection.set(i + 1, j + 1, project(my_image, _ray));
         }
     }
+    t.print_ellapsed_time();
+
     projection.save("projection");
 
     if (true)

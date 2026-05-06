@@ -8,16 +8,11 @@ image::image(size_t width, size_t height) : _width(width), _height(height)
         return;
     }
 
-    _data = new double[width * height];
-    if (!_data)
+    _data = std::shared_ptr<double[]>(new double[width * height]);
+    if (!_data.get())
     {
         std::cout << "Image allocation failed" << std::endl;
     }
-}
-
-image::~image()
-{
-    delete[] _data;
 }
 
 size_t image::width()
@@ -52,7 +47,7 @@ void image::set(size_t x, size_t y, double value)
 
 void image::save(std::string path)
 {
-    if (!_data)
+    if (!_data.get())
     {
         std::cout << "No image data to save" << std::endl;
         return;
@@ -72,6 +67,17 @@ void image::save(std::string path)
     }
 
     file.close();
+}
+
+void image::apply_elementwise(std::function<double(double)> f)
+{
+    for (size_t x = 1; x <= _width; x++)
+    {
+        for (size_t y = 1; y <= _height; y++)
+        {
+            set(x, y, f(get(x, y)));
+        }
+    }
 }
 
 void image::fill_uniform(double value)
