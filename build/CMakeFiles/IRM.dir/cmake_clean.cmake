@@ -1,9 +1,9 @@
 file(REMOVE_RECURSE
   "CMakeFiles/IRM.dir/link.d"
-  "CMakeFiles/IRM.dir/hello_world.cpp.o"
-  "CMakeFiles/IRM.dir/hello_world.cpp.o.d"
   "CMakeFiles/IRM.dir/image.cpp.o"
   "CMakeFiles/IRM.dir/image.cpp.o.d"
+  "CMakeFiles/IRM.dir/main.cpp.o"
+  "CMakeFiles/IRM.dir/main.cpp.o.d"
   "IRM"
   "IRM.pdb"
 )

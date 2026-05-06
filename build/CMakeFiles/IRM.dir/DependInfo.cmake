@@ -8,8 +8,8 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/home/bsr5732a/Desktop/ON5/hello_world.cpp" "CMakeFiles/IRM.dir/hello_world.cpp.o" "gcc" "CMakeFiles/IRM.dir/hello_world.cpp.o.d"
-  "/home/bsr5732a/Desktop/ON5/image.cpp" "CMakeFiles/IRM.dir/image.cpp.o" "gcc" "CMakeFiles/IRM.dir/image.cpp.o.d"
+  "/home/poivre31/Documents/VsCodeProjects/Tomographie/image.cpp" "CMakeFiles/IRM.dir/image.cpp.o" "gcc" "CMakeFiles/IRM.dir/image.cpp.o.d"
+  "/home/poivre31/Documents/VsCodeProjects/Tomographie/main.cpp" "CMakeFiles/IRM.dir/main.cpp.o" "gcc" "CMakeFiles/IRM.dir/main.cpp.o.d"
   "" "IRM" "gcc" "CMakeFiles/IRM.dir/link.d"
   )
 

@@ -30,36 +30,26 @@ size_t image::height()
     return _height;
 }
 
-/// @brief Returns the pixel value at (`x`,`y`)
-/// @param x horizontal position, from one to width / left to right
-/// @param y vertical position, from one to height / top to bottom
-/// @return
 double image::get(size_t x, size_t y)
 {
-    if (x < 1 || x > _width || y < 1 || y > _width)
+    if (x < 1 || x > _width || y < 1 || y > _height)
     {
-        std::cout << "Error: invalid image position" << std::endl;
-        return -1.;
+        std::cout << "Error: invalid image position: (" << x << ", " << y << ") (get)" << std::endl;
+        return 0.;
     }
     return _data[(x - 1) + _width * (y - 1)];
 }
 
-/// @brief Sets the pixel value at (`x`,`y`) to `value`
-/// @param x horizontal position, from one to width / left to right
-/// @param y vertical position, from one to height / top to bottom
-/// @return
 void image::set(size_t x, size_t y, double value)
 {
     if (x < 1 || x > _width || y < 1 || y > _height)
     {
-        std::cout << "Error: invalid image position" << std::endl;
+        std::cout << "Error: invalid image position: (" << x << ", " << y << ") (set)" << std::endl;
         return;
     }
     _data[(x - 1) + _width * (y - 1)] = value;
 }
 
-/// @brief Saves the image to `path`
-/// @param path without the extension
 void image::save(std::string path)
 {
     if (!_data)
@@ -72,15 +62,27 @@ void image::save(std::string path)
     file << _width << "\n";
     file << _height << "\n";
 
-    for (size_t x = 1; x <= _width; x++)
+    for (size_t y = 1; y <= _height; y++)
     {
-        for (size_t y = 1; y <= _height; y++)
+        for (size_t x = 1; x <= _width; x++)
         {
+            // to optimize
             file << get(x, y) << "\n";
         }
     }
 
     file.close();
+}
+
+void image::fill_uniform(double value)
+{
+    for (size_t x = 1; x <= _width; x++)
+    {
+        for (size_t y = 1; y <= _height; y++)
+        {
+            set(x, y, value);
+        }
+    }
 }
 
 void image::fill_rectangle(double value, size_t x0, size_t y0, size_t width, size_t height, bool add)
@@ -116,4 +118,38 @@ void image::fill_ellipse(double value, size_t x0, size_t y0, size_t a, size_t b,
             }
         }
     }
+}
+
+void image::fill_phantom(size_t x0, size_t y0, size_t size, bool high_contrast, bool overwrite)
+{
+    if (overwrite)
+        fill_uniform(0);
+
+    double dark, grey, light;
+    if (high_contrast)
+    {
+        dark = -.8;
+        grey = -.2;
+        light = .1;
+    }
+    else
+    {
+        dark = -.49;
+        grey = -0.01;
+        light = 0.005;
+    }
+    fill_ellipse(1, x0, y0, size * .375, size * .5);
+    fill_ellipse(dark, x0, y0 + size * .01, size * 0.36, size * .475);
+
+    fill_ellipse(grey, x0 + size * .112, y0, size * .06, size * .168);
+    fill_ellipse(grey, x0 - size * .112, y0, size * .087, size * .223);
+
+    fill_ellipse(light, x0, y0 - size * .19, size * .114, size * 0.136);
+
+    fill_ellipse(light, x0, y0 + size * .054, size * .025, size * .025);
+    fill_ellipse(light, x0, y0 - size * .054, size * .025, size * .025);
+
+    fill_ellipse(light, x0 - size * .043, y0 + size * .329, size * .025, size * .013);
+    fill_ellipse(light, x0, y0 + size * .329, size * .013, size * .013);
+    fill_ellipse(light, x0 + size * .033, y0 + size * .329, size * .013, size * .025);
 }

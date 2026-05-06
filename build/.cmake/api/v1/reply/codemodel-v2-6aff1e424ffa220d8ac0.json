@@ -2,11 +2,12 @@
 	"configurations" : 
 	[
 		{
+			"abstractTargets" : [],
 			"directories" : 
 			[
 				{
 					"build" : ".",
-					"jsonFile" : "directory-.-Debug-f5ebdc15457944623624.json",
+					"jsonFile" : "directory-.-Release-9ad1a58d4644cf6543fa.json",
 					"minimumCMakeVersion" : 
 					{
 						"string" : "3.23"
@@ -19,7 +20,7 @@
 					]
 				}
 			],
-			"name" : "Debug",
+			"name" : "Release",
 			"projects" : 
 			[
 				{
@@ -39,7 +40,7 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "IRM::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-IRM-Debug-c2c1736a959e631354e1.json",
+					"jsonFile" : "target-IRM-Release-c3c5123beba2bd4ec9a4.json",
 					"name" : "IRM",
 					"projectIndex" : 0
 				}
@@ -49,12 +50,12 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "/home/bsr5732a/Desktop/ON5/build",
-		"source" : "/home/bsr5732a/Desktop/ON5"
+		"build" : "/home/poivre31/Documents/VsCodeProjects/Tomographie/build",
+		"source" : "/home/poivre31/Documents/VsCodeProjects/Tomographie"
 	},
 	"version" : 
 	{
 		"major" : 2,
-		"minor" : 7
+		"minor" : 9
 	}
 }

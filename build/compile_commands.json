@@ -1,14 +1,14 @@
 [
 {
-  "directory": "/home/bsr5732a/Desktop/ON5/build",
-  "command": "/usr/bin/g++   -g -o CMakeFiles/IRM.dir/hello_world.cpp.o -c /home/bsr5732a/Desktop/ON5/hello_world.cpp",
-  "file": "/home/bsr5732a/Desktop/ON5/hello_world.cpp",
-  "output": "CMakeFiles/IRM.dir/hello_world.cpp.o"
+  "directory": "/home/poivre31/Documents/VsCodeProjects/Tomographie/build",
+  "command": "/usr/bin/g++-14   -O3 -march=native -O3 -DNDEBUG -o CMakeFiles/IRM.dir/main.cpp.o -c /home/poivre31/Documents/VsCodeProjects/Tomographie/main.cpp",
+  "file": "/home/poivre31/Documents/VsCodeProjects/Tomographie/main.cpp",
+  "output": "CMakeFiles/IRM.dir/main.cpp.o"
 },
 {
-  "directory": "/home/bsr5732a/Desktop/ON5/build",
-  "command": "/usr/bin/g++   -g -o CMakeFiles/IRM.dir/image.cpp.o -c /home/bsr5732a/Desktop/ON5/image.cpp",
-  "file": "/home/bsr5732a/Desktop/ON5/image.cpp",
+  "directory": "/home/poivre31/Documents/VsCodeProjects/Tomographie/build",
+  "command": "/usr/bin/g++-14   -O3 -march=native -O3 -DNDEBUG -o CMakeFiles/IRM.dir/image.cpp.o -c /home/poivre31/Documents/VsCodeProjects/Tomographie/image.cpp",
+  "file": "/home/poivre31/Documents/VsCodeProjects/Tomographie/image.cpp",
   "output": "CMakeFiles/IRM.dir/image.cpp.o"
 }
 ]

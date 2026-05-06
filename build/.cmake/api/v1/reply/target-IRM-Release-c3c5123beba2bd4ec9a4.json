@@ -36,13 +36,18 @@
 			}
 		]
 	},
+	"codemodelVersion" : 
+	{
+		"major" : 2,
+		"minor" : 9
+	},
 	"compileGroups" : 
 	[
 		{
 			"compileCommandFragments" : 
 			[
 				{
-					"fragment" : "-g"
+					"fragment" : "-O3 -march=native -O3 -DNDEBUG"
 				}
 			],
 			"language" : "CXX",
@@ -59,11 +64,7 @@
 		"commandFragments" : 
 		[
 			{
-				"fragment" : "-g",
-				"role" : "flags"
-			},
-			{
-				"fragment" : "",
+				"fragment" : "-O3 -march=native -O3 -DNDEBUG",
 				"role" : "flags"
 			}
 		],
@@ -92,7 +93,7 @@
 		{
 			"backtrace" : 2,
 			"compileGroupIndex" : 0,
-			"path" : "hello_world.cpp",
+			"path" : "main.cpp",
 			"sourceGroupIndex" : 0
 		},
 		{

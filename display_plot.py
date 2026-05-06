@@ -1,0 +1,15 @@
+import numpy as np
+from matplotlib import pyplot as plt
+import sys
+
+data = open(sys.argv[1])
+n = int(data.readline())
+
+x = np.empty(n)
+
+for i in range(n):
+    x[i] = float(data.readline())
+
+
+plt.plot(x)
+plt.show()
