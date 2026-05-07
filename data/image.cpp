@@ -45,6 +45,43 @@ void image::set(size_t x, size_t y, double value)
     _data[(x - 1) + _width * (y - 1)] = value;
 }
 
+std::vector<double> image::get_column(size_t x)
+{
+    std::vector<double> output(_height);
+    for (size_t i = 0; i < _height; i++)
+    {
+        output[i] = get(x, i + 1);
+    }
+    return output;
+}
+
+std::vector<double> image::get_line(size_t y)
+{
+    std::vector<double> output(_width);
+    for (size_t i = 0; i < _width; i++)
+    {
+        output[i] = get(i + 1, y);
+    }
+    return output;
+}
+
+void image::set_column(std::vector<double> data, size_t x)
+{
+    for (size_t i = 0; i < _height; i++)
+    {
+        set(x, i + 1, data[i]);
+    }
+}
+
+void image::set_line(std::vector<double> data, size_t y)
+{
+    std::vector<double> output(_width);
+    for (size_t i = 0; i < _width; i++)
+    {
+        set(i + 1, y, data[i]);
+    }
+}
+
 void image::save(std::string path)
 {
     if (!_data.get())

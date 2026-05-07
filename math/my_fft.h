@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
 #include "my_math.h"
-#include "image.h"
+#include "complex.h"
 #include "complex_matrix.h"
 
 template <typename T>

@@ -25,6 +25,11 @@ public:
     /// @param y vertical position, from one to height / top to bottom
     void set(size_t x, size_t y, double value);
 
+    std::vector<double> get_column(size_t x);
+    std::vector<double> get_line(size_t y);
+    void set_column(std::vector<double> data, size_t x);
+    void set_line(std::vector<double> data, size_t y);
+
     /// @brief Saves the image to `path` as a txt file containing line by line: width, then height, then all values in row major order
     /// @param path without the extension
     void save(std::string path);

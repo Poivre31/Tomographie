@@ -4,12 +4,14 @@
 #include <iostream>
 #include <fstream>
 #include <bitset>
-#include "my_math.h"
+#include "complex.h"
+#include "image.h"
 
 class complex_matrix
 {
 public:
     complex_matrix(size_t width, size_t height);
+    complex_matrix(image im);
 
     size_t width();
 

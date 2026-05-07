@@ -15,6 +15,24 @@ complex_matrix::complex_matrix(size_t width, size_t height) : _width(width), _he
     }
 }
 
+complex_matrix::complex_matrix(image im)
+{
+    _width = im.width();
+    _height = im.height();
+    _data = std::shared_ptr<complex[]>(new complex[_width * _height]);
+    if (!_data.get())
+    {
+        std::cout << "Image allocation failed" << std::endl;
+    }
+    for (size_t x = 1; x <= _width; x++)
+    {
+        for (size_t y = 1; y <= _height; y++)
+        {
+            set(x, y, im.get(x, y));
+        }
+    }
+}
+
 size_t complex_matrix::width()
 {
     return _width;

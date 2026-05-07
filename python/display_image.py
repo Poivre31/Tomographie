@@ -6,12 +6,12 @@ img = open(sys.argv[1])
 width = int(img.readline())
 height = int(img.readline())
 
-image = np.empty((height,width))
+image = np.empty((height, width))
 
 for i in range(height):
     for j in range(width):
-        image[i,j] = float(img.readline())
-    
+        image[i, j] = float(img.readline())
 
-plt.imshow(image,cmap='gray')
+
+plt.imshow(image**0.4, cmap="gray")
 plt.show()

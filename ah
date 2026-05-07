@@ -1,0 +1,19 @@
+    phantom.fill_rectangle(1, size * .4, size / 2, size * .5, size * .16);
+    phantom.fill_rectangle(-0.8, size * .4, size / 2, size * .5, size * .14);
+    phantom.fill_rectangle(1.8, size * .4, size / 2, size * .5, size * .04);
+
+    phantom.fill_ellipse(1, size * 0.75, size / 2, size * .11, size * 0.03);
+    phantom.fill_ellipse(-.8, size * 0.75, size / 2, size * .10, size * 0.02);
+    phantom.fill_ellipse(1.8, size * 0.75, size * .5, size * .06, size * 0.006);
+
+    phantom.fill_ellipse(1, size * 0.74, size * .45, size * .09, size * 0.03);
+    phantom.fill_ellipse(-.8, size * 0.74, size * .45, size * .08, size * 0.02);
+    phantom.fill_ellipse(1.8, size * 0.74, size * .45, size * .06, size * 0.006);
+
+    phantom.fill_ellipse(1, size * 0.74, size * .55, size * .09, size * 0.03);
+    phantom.fill_ellipse(-.8, size * 0.74, size * .55, size * .07, size * 0.02);
+    phantom.fill_ellipse(1.8, size * 0.74, size * .55, size * .06, size * 0.006);
+
+    phantom.fill_ellipse(1, size * 0.65, size * .4, size * .03, size * 0.07);
+    phantom.fill_ellipse(-.8, size * 0.65, size * .4, size * .02, size * 0.06);
+    phantom.fill_ellipse(1.8, size * 0.65, size * .4, size * .006, size * 0.02);

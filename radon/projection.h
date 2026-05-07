@@ -206,14 +206,6 @@ double project(image &im, ray r)
         size_t x = 1 + floor(xy.x);
         size_t y = 1 + floor(xy.y);
 
-        // std::cout << "------------------\n"
-        //           << std::endl;
-        // xy.print();
-
-        // if (floor(xy.x) == xy.x)
-        //     x--;
-        // if (floor(xy.y) == xy.y)
-        //     y--;
         integral += (distances[i + 1] - distances[i]) * im.get(x, y);
     }
 
