@@ -45,6 +45,16 @@ void image::set(size_t x, size_t y, double value)
     _data[(x - 1) + _width * (y - 1)] = value;
 }
 
+void image::increment(size_t x, size_t y, double value)
+{
+    if (x < 1 || x > _width || y < 1 || y > _height)
+    {
+        std::cout << "Error: invalid image position: (" << x << ", " << y << ") (set)" << std::endl;
+        return;
+    }
+    _data[(x - 1) + _width * (y - 1)] = _data[(x - 1) + _width * (y - 1)] + value;
+}
+
 std::vector<double> image::get_column(size_t x)
 {
     std::vector<double> output(_height);
@@ -171,7 +181,7 @@ void image::fill_phantom(size_t x0, size_t y0, size_t size, bool high_contrast, 
     double dark, grey, light;
     if (high_contrast)
     {
-        dark = -.8;
+        dark = -.799;
         grey = -.2;
         light = .1;
     }

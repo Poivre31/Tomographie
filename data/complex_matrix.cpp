@@ -15,6 +15,24 @@ complex_matrix::complex_matrix(size_t width, size_t height) : _width(width), _he
     }
 }
 
+complex_matrix::complex_matrix(complex_matrix &im)
+{
+    _width = im.width();
+    _height = im.height();
+    _data = std::shared_ptr<complex[]>(new complex[_width * _height]);
+    if (!_data.get())
+    {
+        std::cout << "Image allocation failed" << std::endl;
+    }
+    for (size_t x = 1; x <= _width; x++)
+    {
+        for (size_t y = 1; y <= _height; y++)
+        {
+            set(x, y, im.get(x, y));
+        }
+    }
+}
+
 complex_matrix::complex_matrix(image im)
 {
     _width = im.width();
@@ -61,6 +79,16 @@ void complex_matrix::set(size_t x, size_t y, complex value)
         return;
     }
     _data[(x - 1) + _width * (y - 1)] = value;
+}
+
+void complex_matrix::increment(size_t x, size_t y, complex value)
+{
+    if (x < 1 || x > _width || y < 1 || y > _height)
+    {
+        std::cout << "Error: invalid image position: (" << x << ", " << y << ") (set)" << std::endl;
+        return;
+    }
+    _data[(x - 1) + _width * (y - 1)] = _data[(x - 1) + _width * (y - 1)] + value;
 }
 
 std::vector<complex> complex_matrix::get_column(size_t x)
@@ -146,7 +174,10 @@ image complex_matrix::phase_to_image()
     {
         for (size_t j = 1; j <= _height; j++)
         {
-            im.set(i, j, std::arg(get(i, j)));
+            double phase = std::arg(get(i, j));
+            if (phase < 0)
+                phase += M_PI;
+            im.set(i, j, phase);
         }
     }
     return im;

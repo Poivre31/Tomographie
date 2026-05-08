@@ -31,6 +31,24 @@ std::vector<complex> dft(std::vector<T> data)
     return result;
 }
 
+template <typename T>
+std::vector<complex> dfti(std::vector<T> data, bool normalize = true)
+{
+    size_t N = data.size();
+    std::vector<complex> result(N);
+    for (size_t k = 0; k < N; k++)
+    {
+        for (size_t n = 0; n < N; n++)
+        {
+            result[k] += data[n] * exp(2 * M_PI * n * k / N * 1i);
+        }
+        if (normalize)
+            result[k] /= N;
+    }
+
+    return result;
+}
+
 // complex_matrix dft_2D(complex_matrix data)
 // {
 //     size_t N = data.width();
@@ -77,8 +95,46 @@ std::vector<complex> fft(std::vector<T> data)
         auto odd = fft(stride(data, 2, 1));
         for (size_t k = 0; k < N / 2; k++)
         {
-            result[k] = 1. / N * (even[k] + exp(-2 * M_PI * k / N * 1i) * odd[k]);
-            result[k + N / 2] = 1. / N * (even[k] - exp(-2 * M_PI * k / N * 1i) * odd[k]);
+            result[k] = (even[k] + exp(-2 * M_PI * k / N * 1i) * odd[k]);
+            result[k + N / 2] = (even[k] - exp(-2 * M_PI * k / N * 1i) * odd[k]);
+        }
+    }
+
+    return result;
+}
+
+template <typename T>
+std::vector<complex> ffti(std::vector<T> data, bool normalize = true)
+{
+    size_t N = data.size();
+    std::vector<complex> result(N);
+    if (!(N && (N && (N - 1))))
+    {
+        std::cout << "FFT implementation only works for data size in powers of 2" << std::endl;
+        return result;
+    }
+
+    if (normalize)
+    {
+        for (size_t i = 0; i < N; i++)
+        {
+            data[i] /= N;
+        }
+    }
+
+    if (N == 2)
+    {
+        return dfti(data, false);
+    }
+
+    else
+    {
+        auto even = ffti(stride(data, 2, 0), false);
+        auto odd = ffti(stride(data, 2, 1), false);
+        for (size_t k = 0; k < N / 2; k++)
+        {
+            result[k] = (even[k] + exp(2 * M_PI * k / N * 1i) * odd[k]);
+            result[k + N / 2] = (even[k] - exp(2 * M_PI * k / N * 1i) * odd[k]);
         }
     }
 
@@ -109,18 +165,42 @@ complex_matrix fft_2D(complex_matrix data)
     return result;
 }
 
+complex_matrix ffti_2D(complex_matrix data)
+{
+    size_t N = data.width();
+    size_t M = data.height();
+    complex_matrix result(N, M);
+
+    if (!(N && (N && (N - 1))) || N != M)
+    {
+        std::cout << "FFT implementation only works for squares of size in powers of 2" << std::endl;
+        return result;
+    }
+
+    for (size_t k = 1; k <= N; k++)
+    {
+        result.set_column(ffti(data.get_column(k)), k);
+    }
+    for (size_t l = 1; l <= M; l++)
+    {
+        result.set_line(ffti(result.get_line(l)), l);
+    }
+
+    return result;
+}
+
 template <typename T>
 std::vector<T> fft_shift(std::vector<T> data)
 {
     size_t N = data.size();
     std::vector<T> result(N);
-    for (size_t i = 0; i < N / 2; i++)
+    for (size_t i = 0; i < (N + 1) / 2; i++)
     {
         result[i + N / 2] = data[i];
     }
     for (size_t i = 0; i < N / 2; i++)
     {
-        result[i] = data[i + N / 2];
+        result[i] = data[i + (N + 1) / 2];
     }
     return result;
 }

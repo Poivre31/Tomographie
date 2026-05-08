@@ -13,5 +13,5 @@ for i in range(height):
         image[i, j] = float(img.readline())
 
 
-plt.imshow(image**0.4, cmap="gray")
+plt.imshow(np.sqrt(image), cmap="gray")
 plt.show()

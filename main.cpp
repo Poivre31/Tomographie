@@ -9,14 +9,13 @@ int main()
     // exemple_fft_1D(1024, 30);
     // exemple_fft_2D(1024, 16);
 
-    size_t size = 512;
+    size_t size = 1024;
     image phantom(size, size);
 
-    // phantom.fill_rectangle(1. / (.8 * size), size / 2, size / 2, .8 * size, .8 * size);
-    phantom.fill_rectangle(1, size / 2, size / 2, size / 4, size / 4);
-    // phantom.fill_phantom(size / 2, size / 2, .8 * size);
-
-    display_image(phantom);
+    // phantom.fill_ellipse(1., size / 2, size / 2, size / 16, size / 16);
+    // phantom.fill_rectangle(1, size / 2, size / 2, size / 4, size / 4);
+    phantom.fill_phantom(size / 2, size / 2, .8 * size);
+    auto phantom_fft = fft_2D_shift(fft_2D(phantom));
 
     timer::start_watch();
     auto projection = sinogram(phantom, size, size, size / 2);
@@ -28,19 +27,40 @@ int main()
         fft_1.set_line(fft_shift(fft(projection.get_line(s))), s);
     }
     complex_matrix polar(size, size);
+    image weight(size, size);
     for (size_t t = 1; t <= size; t++)
     {
         auto v = fft_1.get_line(t);
         double theta = 2 * M_PI * t / (size - 1);
         for (size_t i = 1; i <= size; i++)
         {
-            double x = size / 2 + (i - size / 2) * cos(theta);
-            double y = size / 2 + (i - size / 2) * sin(theta);
-            polar.set(round(x), round(y), v[i]);
+            double x = size / 2. + cos(theta) * (i - size / 2.);
+            double y = size / 2. + sin(theta) * (i - size / 2.);
+            double phase = std::arg(phantom_fft.get(ceil(x), ceil(y)));
+            complex z = abs(v[i]) * exp(1i * phase);
+            polar.increment(ceil(x), ceil(y), z);
+            weight.increment(ceil(x), ceil(y), 1);
+            // if (abs(i - size / 2) > size / 8)
+            //     polar.set(ceil(x), ceil(y), 0);
         }
     }
 
-    display_image(fft_2D_shift(fft_2D(polar)).modulus_to_image());
+    for (size_t i = 1; i <= size; i++)
+    {
+        for (size_t j = 1; j <= size; j++)
+        {
+            if (weight.get(i, j) != 0)
+                polar.set(i, j, polar.get(i, j) / weight.get(i, j));
+        }
+    }
+
+    polar.rotate(1, 1);
+
+    display_image(phantom_fft.modulus_to_image());
+    display_image(polar.modulus_to_image());
+    display_image(phantom);
+    display_image(ffti_2D(polar).modulus_to_image());
+    // display_image(projection);
 
     if (false)
     {

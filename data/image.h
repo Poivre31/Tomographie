@@ -25,6 +25,11 @@ public:
     /// @param y vertical position, from one to height / top to bottom
     void set(size_t x, size_t y, double value);
 
+    /// @brief Increments the pixel value at (`x`,`y`) by `value`
+    /// @param x horizontal position, from one to width / left to right
+    /// @param y vertical position, from one to height / top to bottom
+    void increment(size_t x, size_t y, double value);
+
     std::vector<double> get_column(size_t x);
     std::vector<double> get_line(size_t y);
     void set_column(std::vector<double> data, size_t x);
