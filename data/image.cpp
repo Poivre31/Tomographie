@@ -8,7 +8,7 @@ image::image(size_t width, size_t height) : _width(width), _height(height)
         return;
     }
 
-    _data = std::shared_ptr<double[]>(new double[width * height]);
+    _data = std::shared_ptr<double[]>(new double[width * height]());
     if (!_data.get())
     {
         std::cout << "Image allocation failed" << std::endl;
@@ -52,7 +52,7 @@ void image::increment(size_t x, size_t y, double value)
         std::cout << "Error: invalid image position: (" << x << ", " << y << ") (set)" << std::endl;
         return;
     }
-    _data[(x - 1) + _width * (y - 1)] = _data[(x - 1) + _width * (y - 1)] + value;
+    _data[(x - 1) + _width * (y - 1)] += value;
 }
 
 std::vector<double> image::get_column(size_t x)

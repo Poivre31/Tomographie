@@ -12,16 +12,28 @@ public:
     static void start_watch()
     {
         t0 = high_resolution_clock::now();
+        offset = 0.;
+    }
+
+    static void pause_watch()
+    {
+        offset += duration_cast<milliseconds>(high_resolution_clock::now() - t0).count();
+    }
+
+    static void continue_watch()
+    {
+        t0 = high_resolution_clock::now();
     }
 
     static void print_ellapsed_time()
     {
         auto t1 = high_resolution_clock::now();
-        std::cout << "Time since watch start: " << duration_cast<milliseconds>(t1 - t0).count() << "ms" << std::endl;
+        std::cout << "Time since watch start: " << duration_cast<milliseconds>(t1 - t0).count() + offset << "ms" << std::endl;
     }
 
 private:
     static inline high_resolution_clock::time_point t0;
+    static inline double offset = 0.;
 };
 
 void save_vector(std::vector<double> data, std::string path)

@@ -16,6 +16,54 @@ std::vector<T> stride(std::vector<T> data, size_t step, size_t offset)
 }
 
 template <typename T>
+std::vector<T> fft_shift(std::vector<T> data)
+{
+    size_t N = data.size();
+    std::vector<T> result(N);
+    for (size_t i = 0; i < (N + 1) / 2; i++)
+    {
+        result[i + N / 2] = data[i];
+    }
+    for (size_t i = 0; i < N / 2; i++)
+    {
+        result[i] = data[i + (N + 1) / 2];
+    }
+    return result;
+}
+
+complex_matrix fft_2D_shift(complex_matrix data)
+{
+    size_t N = data.width();
+    size_t M = data.height();
+    complex_matrix result(N, M);
+
+    for (size_t k = 1; k <= N / 2; k++)
+    {
+        for (size_t l = 1; l <= M / 2; l++)
+        {
+            result.set(k + N / 2, l, data.get(k, l + M / 2));
+        }
+        for (size_t l = 1; l <= M / 2; l++)
+        {
+            result.set(k + N / 2, l + M / 2, data.get(k, l));
+        }
+    }
+    for (size_t k = 1; k <= N / 2; k++)
+    {
+        for (size_t l = 1; l <= M / 2; l++)
+        {
+            result.set(k, l, data.get(k + N / 2, l + M / 2));
+        }
+        for (size_t l = 1; l <= M / 2; l++)
+        {
+            result.set(k, l + M / 2, data.get(k + N / 2, l));
+        }
+    }
+
+    return result;
+}
+
+template <typename T>
 std::vector<complex> dft(std::vector<T> data)
 {
     size_t N = data.size();
@@ -74,7 +122,7 @@ std::vector<complex> dfti(std::vector<T> data, bool normalize = true)
 // }
 
 template <typename T>
-std::vector<complex> fft(std::vector<T> data)
+std::vector<complex> fft(std::vector<T> data, bool recurrence = false)
 {
     size_t N = data.size();
     std::vector<complex> result(N);
@@ -83,6 +131,9 @@ std::vector<complex> fft(std::vector<T> data)
         std::cout << "FFT implementation only works for data size in powers of 2" << std::endl;
         return result;
     }
+
+    if (!recurrence)
+        data = fft_shift(data);
 
     if (N == 2)
     {
@@ -91,20 +142,22 @@ std::vector<complex> fft(std::vector<T> data)
 
     else
     {
-        auto even = fft(stride(data, 2, 0));
-        auto odd = fft(stride(data, 2, 1));
+        auto even = fft(stride(data, 2, 0), true);
+        auto odd = fft(stride(data, 2, 1), true);
         for (size_t k = 0; k < N / 2; k++)
         {
-            result[k] = (even[k] + exp(-2 * M_PI * k / N * 1i) * odd[k]);
-            result[k + N / 2] = (even[k] - exp(-2 * M_PI * k / N * 1i) * odd[k]);
+            result[k] = even[k] + exp(-2 * M_PI * k / N * 1i) * odd[k];
+            result[k + N / 2] = even[k] - exp(-2 * M_PI * k / N * 1i) * odd[k];
         }
     }
-
-    return result;
+    if (!recurrence)
+        return fft_shift(result);
+    else
+        return result;
 }
 
 template <typename T>
-std::vector<complex> ffti(std::vector<T> data, bool normalize = true)
+std::vector<complex> ffti(std::vector<T> data, bool recurrence = false)
 {
     size_t N = data.size();
     std::vector<complex> result(N);
@@ -114,13 +167,17 @@ std::vector<complex> ffti(std::vector<T> data, bool normalize = true)
         return result;
     }
 
-    if (normalize)
+    // Ne normalise qu'une seule fois
+    if (!recurrence)
     {
         for (size_t i = 0; i < N; i++)
         {
             data[i] /= N;
         }
     }
+
+    if (!recurrence)
+        data = fft_shift(data);
 
     if (N == 2)
     {
@@ -129,8 +186,8 @@ std::vector<complex> ffti(std::vector<T> data, bool normalize = true)
 
     else
     {
-        auto even = ffti(stride(data, 2, 0), false);
-        auto odd = ffti(stride(data, 2, 1), false);
+        auto even = ffti(stride(data, 2, 0), true);
+        auto odd = ffti(stride(data, 2, 1), true);
         for (size_t k = 0; k < N / 2; k++)
         {
             result[k] = (even[k] + exp(2 * M_PI * k / N * 1i) * odd[k]);
@@ -138,10 +195,13 @@ std::vector<complex> ffti(std::vector<T> data, bool normalize = true)
         }
     }
 
-    return result;
+    if (!recurrence)
+        return fft_shift(result);
+    else
+        return result;
 }
 
-complex_matrix fft_2D(complex_matrix data)
+complex_matrix fft_2D(complex_matrix data, bool recurrence = false)
 {
     size_t N = data.width();
     size_t M = data.height();
@@ -153,19 +213,25 @@ complex_matrix fft_2D(complex_matrix data)
         return result;
     }
 
+    if (!recurrence)
+        data = fft_2D_shift(data);
+
     for (size_t k = 1; k <= N; k++)
     {
-        result.set_column(fft(data.get_column(k)), k);
+        result.set_column(fft(data.get_column(k), true), k);
     }
     for (size_t l = 1; l <= M; l++)
     {
-        result.set_line(fft(result.get_line(l)), l);
+        result.set_line(fft(result.get_line(l), true), l);
     }
 
-    return result;
+    if (!recurrence)
+        return fft_2D_shift(result);
+    else
+        return result;
 }
 
-complex_matrix ffti_2D(complex_matrix data)
+complex_matrix ffti_2D(complex_matrix data, bool recurrence = false)
 {
     size_t N = data.width();
     size_t M = data.height();
@@ -177,62 +243,20 @@ complex_matrix ffti_2D(complex_matrix data)
         return result;
     }
 
+    if (!recurrence)
+        data = fft_2D_shift(data);
+
     for (size_t k = 1; k <= N; k++)
     {
-        result.set_column(ffti(data.get_column(k)), k);
+        result.set_column(ffti(data.get_column(k), true), k);
     }
     for (size_t l = 1; l <= M; l++)
     {
-        result.set_line(ffti(result.get_line(l)), l);
+        result.set_line(ffti(result.get_line(l), true), l);
     }
 
-    return result;
-}
-
-template <typename T>
-std::vector<T> fft_shift(std::vector<T> data)
-{
-    size_t N = data.size();
-    std::vector<T> result(N);
-    for (size_t i = 0; i < (N + 1) / 2; i++)
-    {
-        result[i + N / 2] = data[i];
-    }
-    for (size_t i = 0; i < N / 2; i++)
-    {
-        result[i] = data[i + (N + 1) / 2];
-    }
-    return result;
-}
-
-complex_matrix fft_2D_shift(complex_matrix data)
-{
-    size_t N = data.width();
-    size_t M = data.height();
-    complex_matrix result(N, M);
-
-    for (size_t k = 1; k <= N / 2; k++)
-    {
-        for (size_t l = 1; l <= M / 2; l++)
-        {
-            result.set(k + N / 2, l, data.get(k, l + M / 2));
-        }
-        for (size_t l = 1; l <= M / 2; l++)
-        {
-            result.set(k + N / 2, l + M / 2, data.get(k, l));
-        }
-    }
-    for (size_t k = 1; k <= N / 2; k++)
-    {
-        for (size_t l = 1; l <= M / 2; l++)
-        {
-            result.set(k, l, data.get(k + N / 2, l + M / 2));
-        }
-        for (size_t l = 1; l <= M / 2; l++)
-        {
-            result.set(k, l + M / 2, data.get(k + N / 2, l));
-        }
-    }
-
-    return result;
+    if (!recurrence)
+        return fft_2D_shift(result);
+    else
+        return result;
 }

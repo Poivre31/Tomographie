@@ -19,7 +19,7 @@ complex_matrix::complex_matrix(complex_matrix &im)
 {
     _width = im.width();
     _height = im.height();
-    _data = std::shared_ptr<complex[]>(new complex[_width * _height]);
+    _data = std::shared_ptr<complex[]>(new complex[_width * _height]());
     if (!_data.get())
     {
         std::cout << "Image allocation failed" << std::endl;
@@ -175,8 +175,8 @@ image complex_matrix::phase_to_image()
         for (size_t j = 1; j <= _height; j++)
         {
             double phase = std::arg(get(i, j));
-            if (phase < 0)
-                phase += M_PI;
+            if (phase >= 3.1415)
+                phase = -phase;
             im.set(i, j, phase);
         }
     }
