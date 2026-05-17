@@ -65,7 +65,7 @@ complex complex_matrix::get(size_t x, size_t y)
 {
     if (x < 1 || x > _width || y < 1 || y > _height)
     {
-        std::cout << "Error: invalid image position: (" << x << ", " << y << ") (get)" << std::endl;
+        // std::cout << "Error: invalid image position: (" << x << ", " << y << ") (get)" << std::endl;
         return 0.;
     }
     return _data[(x - 1) + _width * (y - 1)];
@@ -75,7 +75,7 @@ void complex_matrix::set(size_t x, size_t y, complex value)
 {
     if (x < 1 || x > _width || y < 1 || y > _height)
     {
-        std::cout << "Error: invalid image position: (" << x << ", " << y << ") (set)" << std::endl;
+        // std::cout << "Error: invalid image position: (" << x << ", " << y << ") (set)" << std::endl;
         return;
     }
     _data[(x - 1) + _width * (y - 1)] = value;
@@ -85,7 +85,7 @@ void complex_matrix::increment(size_t x, size_t y, complex value)
 {
     if (x < 1 || x > _width || y < 1 || y > _height)
     {
-        std::cout << "Error: invalid image position: (" << x << ", " << y << ") (set)" << std::endl;
+        // std::cout << "Error: invalid image position: (" << x << ", " << y << ") (set)" << std::endl;
         return;
     }
     _data[(x - 1) + _width * (y - 1)] = _data[(x - 1) + _width * (y - 1)] + value;
@@ -181,4 +181,15 @@ image complex_matrix::phase_to_image()
         }
     }
     return im;
+}
+
+void complex_matrix::apply_elementwise(std::function<complex(complex)> f)
+{
+    for (size_t x = 1; x <= _width; x++)
+    {
+        for (size_t y = 1; y <= _height; y++)
+        {
+            set(x, y, f(get(x, y)));
+        }
+    }
 }

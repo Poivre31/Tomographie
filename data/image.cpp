@@ -29,7 +29,7 @@ double image::get(size_t x, size_t y)
 {
     if (x < 1 || x > _width || y < 1 || y > _height)
     {
-        std::cout << "Error: invalid image position: (" << x << ", " << y << ") (get)" << std::endl;
+        // std::cout << "Error: invalid image position: (" << x << ", " << y << ") (get)" << std::endl;
         return 0.;
     }
     return _data[(x - 1) + _width * (y - 1)];
@@ -39,7 +39,7 @@ void image::set(size_t x, size_t y, double value)
 {
     if (x < 1 || x > _width || y < 1 || y > _height)
     {
-        std::cout << "Error: invalid image position: (" << x << ", " << y << ") (set)" << std::endl;
+        // std::cout << "Error: invalid image position: (" << x << ", " << y << ") (set)" << std::endl;
         return;
     }
     _data[(x - 1) + _width * (y - 1)] = value;
@@ -49,7 +49,7 @@ void image::increment(size_t x, size_t y, double value)
 {
     if (x < 1 || x > _width || y < 1 || y > _height)
     {
-        std::cout << "Error: invalid image position: (" << x << ", " << y << ") (set)" << std::endl;
+        // std::cout << "Error: invalid image position: (" << x << ", " << y << ") (set)" << std::endl;
         return;
     }
     _data[(x - 1) + _width * (y - 1)] += value;

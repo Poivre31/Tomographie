@@ -197,7 +197,11 @@ double project(image &im, ray r)
     auto distances = grid_intersects(im.width(), im.height(), r);
     if (distances.size() == 0)
         return 0.;
+
+    /// A OPTIMISER
+    timer::continue_watch("project");
     std::sort(distances.begin(), distances.end());
+    timer::pause_watch("project");
 
     double integral = 0;
     for (size_t i = 0; i < distances.size() - 1; i++)

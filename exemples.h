@@ -1,10 +1,12 @@
 #pragma once
-#include "utility.h"
+#include "timer.h"
+#include "save.h"
 #include "my_fft.h"
 #include "my_math.h"
 
 void exemple_fft_1D(size_t n, size_t a)
 {
+    timer::start_watch("exemple");
     std::vector<double> aperture(n);
     for (size_t i = 0; i < n; i++)
     {
@@ -13,11 +15,10 @@ void exemple_fft_1D(size_t n, size_t a)
         else
             aperture[i] = 0;
     }
-    timer::start_watch();
     auto datafft = fft(aperture);
-    timer::print_ellapsed_time();
     auto ifft = ffti(datafft);
 
+    timer::print_ellapsed_time("exemple");
     // display_plot(aperture);
     display_plot(real(datafft));
     display_plot(real(ifft));
@@ -25,6 +26,7 @@ void exemple_fft_1D(size_t n, size_t a)
 
 void exemple_fft_2D(size_t n, size_t a)
 {
+    timer::start_watch("exemple");
     complex_matrix aperture(n, n);
 
     for (size_t i = 1; i <= n; i++)
@@ -38,10 +40,9 @@ void exemple_fft_2D(size_t n, size_t a)
         }
     }
 
-    timer::start_watch();
     auto im = fft_2D(aperture);
-    timer::print_ellapsed_time();
     auto ifft = ffti_2D(im).real_part_to_image();
 
+    timer::print_ellapsed_time("exemple");
     display_images({im.real_part_to_image(), ifft}, 2.2);
 }

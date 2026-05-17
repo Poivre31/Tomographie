@@ -68,6 +68,8 @@ public:
 
     image phase_to_image();
 
+    void apply_elementwise(std::function<complex(complex)> f);
+
 private:
     size_t _width;
     size_t _height;
