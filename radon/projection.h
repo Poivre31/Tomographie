@@ -202,12 +202,11 @@ std::vector<double> grid_intersects(size_t width, size_t height, ray r)
 
 double project(image &im, ray r)
 {
-    timer::continue_watch("project");
     auto distances = grid_intersects(im.width(), im.height(), r);
-    timer::pause_watch("project");
     if (distances.size() == 0)
         return 0.;
 
+    timer::continue_watch("project");
     double integral = 0;
     for (size_t i = 0; i < distances.size() - 1; i++)
     {
@@ -217,6 +216,7 @@ double project(image &im, ray r)
 
         integral += (distances[i + 1] - distances[i]) * im.get(x, y);
     }
+    timer::pause_watch("project");
 
     return integral;
 }

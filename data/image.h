@@ -41,6 +41,8 @@ public:
 
     void apply_elementwise(std::function<double(double)> f);
 
+    void add_normal_noise(double variance_multiplier);
+
     /// @brief Fills the entire image with `value`
     void fill_uniform(double value);
 

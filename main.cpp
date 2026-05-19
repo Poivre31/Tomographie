@@ -20,7 +20,7 @@ int main()
 {
 
     timer::start_watch();
-    size_t size = 1024;
+    size_t size = 512;
     double d_max = size / 2;
     image phantom(size, size);
 
@@ -31,13 +31,14 @@ int main()
 
     timer::start_watch("sinogram");
     auto projection = sinogram(phantom, size, size, d_max);
+    projection.add_normal_noise(0.1);
     timer::print_ellapsed_time("sinogram");
 
     complex_matrix fft_1(size, size);
     for (size_t s = 1; s <= size; s++)
     {
         fft_1.set_line(fft(projection.get_line(s)), s);
-    }
+        }
     complex_matrix polar(size, size);
     image weight(size, size);
 
@@ -93,13 +94,13 @@ int main()
     timer::print_ellapsed_time("fft");
     timer::print_ellapsed_time();
 
-    display_images({fft_1.modulus_to_image(),
-                    phantom_fft.modulus_to_image(),
-                    polar.modulus_to_image(),
-                    fft_1.phase_to_image(),
-                    phantom_fft.phase_to_image(),
-                    polar.phase_to_image()},
-                   {3., 3., 3., 1., 1., 1.});
+    // display_images({fft_1.modulus_to_image(),
+    //                 phantom_fft.modulus_to_image(),
+    //                 polar.modulus_to_image(),
+    //                 fft_1.phase_to_image(),
+    //                 phantom_fft.phase_to_image(),
+    //                 polar.phase_to_image()},
+    //                {3., 3., 3., 1., 1., 1.});
 
     // display_image(phantom_fft.phase_to_image(), 1);
     // display_image(polar.phase_to_image(), 1);

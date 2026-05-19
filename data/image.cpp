@@ -1,4 +1,5 @@
 #include "image.h"
+#include "my_random.h"
 
 image::image(size_t width, size_t height) : _width(width), _height(height)
 {
@@ -125,6 +126,12 @@ void image::apply_elementwise(std::function<double(double)> f)
             set(x, y, f(get(x, y)));
         }
     }
+}
+
+void image::add_normal_noise(double variance_multiplier)
+{
+    apply_elementwise([variance_multiplier](double x)
+                      { return random_normal(x, x * variance_multiplier); });
 }
 
 void image::fill_uniform(double value)
