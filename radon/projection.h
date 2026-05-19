@@ -157,14 +157,22 @@ std::vector<double> grid_intersects(size_t width, size_t height, ray r)
         }
     }
 
+    std::vector<double> horizontal;
     for (size_t y = ceil(std::min(intersect_1.y, intersect_2.y)); y <= floor(std::max(intersect_1.y, intersect_2.y)); y++)
     {
-        distances.push_back(r.x_intersect_distance(y));
+        horizontal.push_back(r.x_intersect_distance(y));
     }
+    std::vector<double> vertical;
     for (size_t x = ceil(std::min(intersect_1.x, intersect_2.x)); x <= floor(std::max(intersect_1.x, intersect_2.x)); x++)
     {
-        distances.push_back(r.y_intersect_distance(x));
+        vertical.push_back(r.y_intersect_distance(x));
     }
+    if (!std::is_sorted(horizontal.begin(), horizontal.end()))
+        std::reverse(horizontal.begin(), horizontal.end());
+    if (!std::is_sorted(vertical.begin(), vertical.end()))
+        std::reverse(vertical.begin(), vertical.end());
+    distances.resize(horizontal.size() + vertical.size());
+    std::merge(horizontal.begin(), horizontal.end(), vertical.begin(), vertical.end(), distances.begin());
     return distances;
 }
 
@@ -194,14 +202,11 @@ std::vector<double> grid_intersects(size_t width, size_t height, ray r)
 
 double project(image &im, ray r)
 {
+    timer::continue_watch("project");
     auto distances = grid_intersects(im.width(), im.height(), r);
+    timer::pause_watch("project");
     if (distances.size() == 0)
         return 0.;
-
-    /// A OPTIMISER
-    timer::continue_watch("project");
-    std::sort(distances.begin(), distances.end());
-    timer::pause_watch("project");
 
     double integral = 0;
     for (size_t i = 0; i < distances.size() - 1; i++)

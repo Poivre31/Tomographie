@@ -18,8 +18,9 @@ double overlap_circles(vec2 c1, vec2 c2, double radius = sqrt(2))
 
 int main()
 {
+
     timer::start_watch();
-    size_t size = 256;
+    size_t size = 1024;
     double d_max = size / 2;
     image phantom(size, size);
 
@@ -91,7 +92,7 @@ int main()
     timer::print_ellapsed_time("project");
     timer::print_ellapsed_time("fft");
     timer::print_ellapsed_time();
-    return 0;
+
     display_images({fft_1.modulus_to_image(),
                     phantom_fft.modulus_to_image(),
                     polar.modulus_to_image(),
