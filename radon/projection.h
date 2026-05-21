@@ -218,5 +218,5 @@ double project(image &im, ray r)
     }
     timer::pause_watch("project");
 
-    return integral;
+    return integral / im.width();
 }
