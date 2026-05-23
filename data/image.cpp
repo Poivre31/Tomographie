@@ -15,6 +15,18 @@ image::image(size_t width, size_t height) : _width(width), _height(height)
     }
 }
 
+const image image::copy()
+{
+    image result(_width, _height);
+    for (size_t x = 1; x <= _width; x++)
+    {
+        for (size_t y = 1; y <= _height; y++)
+        {
+            result.set(x, y, get(x, y));
+        }
+    }
+    return result;
+}
 size_t image::width()
 {
     return _width;
@@ -25,7 +37,7 @@ size_t image::height()
     return _height;
 }
 
-double image::get(size_t x, size_t y)
+const double image::get(size_t x, size_t y)
 {
     if (x < 1 || x > _width || y < 1 || y > _height)
     {
@@ -55,7 +67,18 @@ void image::increment(size_t x, size_t y, double value)
     _data[(x - 1) + _width * (y - 1)] += value;
 }
 
-std::vector<double> image::get_column(size_t x)
+/// @brief Returns the portion of the image from (x0,y0) included to (x1,y1) excluded.
+const image image::get_portion(size_t x0, size_t y0, size_t x1, size_t y1)
+{
+    size_t width = x1 - x0;
+    size_t height = y1 - y0;
+    image result(width, height);
+    result.apply_elementwise([this, x0, y0](size_t i, size_t j, double v)
+                             { return get(i + x0 - 1, j + y0 - 1); });
+    return result;
+}
+
+const std::vector<double> image::get_column(size_t x)
 {
     std::vector<double> output(_height);
     for (size_t i = 0; i < _height; i++)
@@ -65,7 +88,7 @@ std::vector<double> image::get_column(size_t x)
     return output;
 }
 
-std::vector<double> image::get_line(size_t y)
+const std::vector<double> image::get_line(size_t y)
 {
     std::vector<double> output(_width);
     for (size_t i = 0; i < _width; i++)
@@ -92,7 +115,7 @@ void image::set_line(std::vector<double> data, size_t y)
     }
 }
 
-void image::save(std::string path)
+const void image::save(std::string path)
 {
     if (!_data.get())
     {
@@ -127,6 +150,17 @@ void image::apply_elementwise(std::function<double(double)> f)
     }
 }
 
+void image::apply_elementwise(std::function<double(size_t, size_t, double)> f)
+{
+    for (size_t x = 1; x <= _width; x++)
+    {
+        for (size_t y = 1; y <= _height; y++)
+        {
+            set(x, y, f(x, y, get(x, y)));
+        }
+    }
+}
+
 void image::fill_uniform(double value)
 {
     for (size_t x = 1; x <= _width; x++)
@@ -144,9 +178,9 @@ void image::fill_rectangle(double value, size_t x0, size_t y0, size_t width, siz
     size_t x2 = x0 + width / 2;
     size_t y1 = y0 - height / 2;
     size_t y2 = y0 + height / 2;
-    for (size_t x = std::max(x1, (size_t)0); x < std::min(x2, _width); x++)
+    for (size_t x = std::max(x1, (size_t)1); x <= std::min(x2, _width); x++)
     {
-        for (size_t y = std::max(y1, (size_t)0); y < std::min(y2, _height); y++)
+        for (size_t y = std::max(y1, (size_t)1); y <= std::min(y2, _height); y++)
         {
             if (add)
                 set(x, y, value + get(x, y));

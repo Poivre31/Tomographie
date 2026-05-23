@@ -1,8 +1,9 @@
 #pragma once
 #include "ray.h"
 #include "timer.h"
+#include "bilinear_interp.h"
 
-std::vector<double> grid_intersects(size_t width, size_t height, ray r)
+std::tuple<bool, vec2, vec2> boundary_intersects(size_t width, size_t height, ray r)
 {
     std::vector<double> distances;
     vec2 intersect_1;
@@ -22,7 +23,7 @@ std::vector<double> grid_intersects(size_t width, size_t height, ray r)
         bool right = (y_right >= 0 && y_right <= height);
 
         if (!(top || bottom || left || right))
-            return distances;
+            return std::make_tuple(false, vec2{}, vec2{});
 
         if (top)
             intersect_1 = vec2(x_top, 0);
@@ -66,7 +67,7 @@ std::vector<double> grid_intersects(size_t width, size_t height, ray r)
                 intersect_2 = vec2(width, r.origin().y);
             }
             else
-                return distances;
+                return std::make_tuple(false, vec2{}, vec2{});
         }
         else // then (r.direction().x == 0)
         {
@@ -76,44 +77,33 @@ std::vector<double> grid_intersects(size_t width, size_t height, ray r)
                 intersect_2 = vec2(r.origin().x, height);
             }
             else
-                return distances;
+                return std::make_tuple(false, vec2{}, vec2{});
         }
     }
-
-    std::vector<double> horizontal;
-    for (size_t y = ceil(std::min(intersect_1.y, intersect_2.y)); y <= floor(std::max(intersect_1.y, intersect_2.y)); y++)
-    {
-        horizontal.push_back(r.x_intersect_distance(y));
-    }
-    std::vector<double> vertical;
-    for (size_t x = ceil(std::min(intersect_1.x, intersect_2.x)); x <= floor(std::max(intersect_1.x, intersect_2.x)); x++)
-    {
-        vertical.push_back(r.y_intersect_distance(x));
-    }
-    if (!std::is_sorted(horizontal.begin(), horizontal.end()))
-        std::reverse(horizontal.begin(), horizontal.end());
-    if (!std::is_sorted(vertical.begin(), vertical.end()))
-        std::reverse(vertical.begin(), vertical.end());
-    distances.resize(horizontal.size() + vertical.size());
-    std::merge(horizontal.begin(), horizontal.end(), vertical.begin(), vertical.end(), distances.begin());
-    return distances;
+    return std::make_tuple(true, intersect_1, intersect_2);
 }
 
-double project(image &im, ray r)
+/// @brief Computes the projection of the image along ray direction using trapezoidal integration on bilinearly interpolated points.
+/// @param max_steps Number of integration steps along the longest path (the diagonal of the image), will be ajusted for shorter paths.
+/// @return
+double project_lerp(image &im, ray r, size_t max_steps)
 {
-    auto distances = grid_intersects(im.width(), im.height(), r);
-    if (distances.size() == 0)
+    auto [intersect_found, intersect_1, intersect_2] = boundary_intersects(im.width(), im.height(), r);
+    if (!intersect_found)
         return 0.;
+
+    size_t N = max_steps * (intersect_2 - intersect_1).norm() / vec2{(double)im.height(), (double)im.width()}.norm();
+    if (N <= 1)
+        return 0.;
+    double dl = (intersect_2 - intersect_1).norm() / (N - 1);
 
     timer::continue_watch("project");
     double integral = 0;
-    for (size_t i = 0; i < distances.size() - 1; i++)
+    for (size_t i = 0; i < N; i++)
     {
-        vec2 xy = r.at_distance((distances[i] + distances[i + 1]) * .5);
-        size_t x = floor(xy.x);
-        size_t y = floor(xy.y);
-
-        integral += (distances[i + 1] - distances[i]) * im.get(x, y);
+        vec2 xy = r.at_distance(i * dl);
+        double value = bilinear_interpolation(im, xy.x, xy.y);
+        integral += dl * value;
     }
     timer::pause_watch("project");
 

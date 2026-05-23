@@ -7,7 +7,7 @@ n_image = (len(sys.argv) - 1) // 2
 n_plot_h = n_image
 n_plot_v = 1
 
-if n_image > 2:
+if n_image > 3:
     n_plot_h = 2
     n_plot_v = 2
 if n_image > 4:

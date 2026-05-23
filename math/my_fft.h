@@ -20,6 +20,7 @@ std::vector<complex> fft(std::vector<T> data, bool recurrence = false)
 
     if (N == 2)
     {
+
         return dft(data);
     }
 

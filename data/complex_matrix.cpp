@@ -8,14 +8,14 @@ complex_matrix::complex_matrix(size_t width, size_t height) : _width(width), _he
         return;
     }
 
-    _data = std::shared_ptr<complex[]>(new complex[width * height]);
+    _data = std::shared_ptr<complex[]>(new complex[width * height]());
     if (!_data.get())
     {
         std::cout << "Image allocation failed" << std::endl;
     }
 }
 
-complex_matrix::complex_matrix(complex_matrix &im)
+complex_matrix::complex_matrix(image im)
 {
     _width = im.width();
     _height = im.height();
@@ -33,22 +33,17 @@ complex_matrix::complex_matrix(complex_matrix &im)
     }
 }
 
-complex_matrix::complex_matrix(image im)
+const complex_matrix complex_matrix::copy()
 {
-    _width = im.width();
-    _height = im.height();
-    _data = std::shared_ptr<complex[]>(new complex[_width * _height]);
-    if (!_data.get())
-    {
-        std::cout << "Image allocation failed" << std::endl;
-    }
+    complex_matrix result(_width, _height);
     for (size_t x = 1; x <= _width; x++)
     {
         for (size_t y = 1; y <= _height; y++)
         {
-            set(x, y, im.get(x, y));
+            result.set(x, y, get(x, y));
         }
     }
+    return result;
 }
 
 size_t complex_matrix::width()
@@ -61,7 +56,7 @@ size_t complex_matrix::height()
     return _height;
 }
 
-complex complex_matrix::get(size_t x, size_t y)
+const complex complex_matrix::get(size_t x, size_t y)
 {
     if (x < 1 || x > _width || y < 1 || y > _height)
     {
@@ -91,7 +86,7 @@ void complex_matrix::increment(size_t x, size_t y, complex value)
     _data[(x - 1) + _width * (y - 1)] = _data[(x - 1) + _width * (y - 1)] + value;
 }
 
-std::vector<complex> complex_matrix::get_column(size_t x)
+const std::vector<complex> complex_matrix::get_column(size_t x)
 {
     std::vector<complex> output(_height);
     for (size_t i = 0; i < _height; i++)
@@ -101,7 +96,7 @@ std::vector<complex> complex_matrix::get_column(size_t x)
     return output;
 }
 
-std::vector<complex> complex_matrix::get_line(size_t y)
+const std::vector<complex> complex_matrix::get_line(size_t y)
 {
     std::vector<complex> output(_width);
     for (size_t i = 0; i < _width; i++)
@@ -128,7 +123,7 @@ void complex_matrix::set_line(std::vector<complex> data, size_t y)
     }
 }
 
-image complex_matrix::real_part_to_image()
+const image complex_matrix::real_part_to_image()
 {
     image im(_width, _height);
     for (size_t i = 1; i <= _width; i++)
@@ -141,7 +136,7 @@ image complex_matrix::real_part_to_image()
     return im;
 }
 
-image complex_matrix::imag_part_to_image()
+const image complex_matrix::imag_part_to_image()
 {
     image im(_width, _height);
     for (size_t i = 1; i <= _width; i++)
@@ -154,7 +149,7 @@ image complex_matrix::imag_part_to_image()
     return im;
 }
 
-image complex_matrix::modulus_to_image()
+const image complex_matrix::modulus_to_image()
 {
     image im(_width, _height);
     for (size_t i = 1; i <= _width; i++)
@@ -167,7 +162,7 @@ image complex_matrix::modulus_to_image()
     return im;
 }
 
-image complex_matrix::phase_to_image()
+const image complex_matrix::phase_to_image()
 {
     image im(_width, _height);
     for (size_t i = 1; i <= _width; i++)
