@@ -10,7 +10,7 @@ class image
 {
 public:
     image(size_t width, size_t height);
-    const image copy();
+    image copy() const;
 
     size_t width();
 
@@ -19,7 +19,7 @@ public:
     /// @brief Returns the pixel value at (`x`,`y`)
     /// @param x horizontal position, from one to width / left to right
     /// @param y vertical position, from one to height / top to bottom
-    const double get(size_t x, size_t y);
+    double get(size_t x, size_t y) const;
 
     /// @brief Sets the pixel value at (`x`,`y`) to `value`
     /// @param x horizontal position, from one to width / left to right
@@ -31,15 +31,15 @@ public:
     /// @param y vertical position, from one to height / top to bottom
     void increment(size_t x, size_t y, double value);
 
-    const image get_portion(size_t x0, size_t y0, size_t x1, size_t y1);
-    const std::vector<double> get_column(size_t x);
-    const std::vector<double> get_line(size_t y);
+    image get_portion(size_t x0, size_t y0, size_t x1, size_t y1) const;
+    std::vector<double> get_column(size_t x) const;
+    std::vector<double> get_line(size_t y) const;
     void set_column(std::vector<double> data, size_t x);
     void set_line(std::vector<double> data, size_t y);
 
     /// @brief Saves the image to `path` as a txt file containing line by line: width, then height, then all values in row major order
     /// @param path without the extension
-    const void save(std::string path);
+    void save(std::string path) const;
 
     void apply_elementwise(std::function<double(double)> f);
     void apply_elementwise(std::function<double(size_t, size_t, double)> f);

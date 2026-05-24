@@ -34,7 +34,7 @@ complex_matrix::complex_matrix(image im)
     }
 }
 
-const complex_matrix complex_matrix::copy()
+complex_matrix complex_matrix::copy() const
 {
     complex_matrix result(_width, _height);
     for (size_t x = 1; x <= _width; x++)
@@ -57,7 +57,7 @@ size_t complex_matrix::height()
     return _height;
 }
 
-const complex complex_matrix::get(size_t x, size_t y)
+complex complex_matrix::get(size_t x, size_t y) const
 {
     if (x < 1 || x > _width || y < 1 || y > _height)
     {
@@ -87,7 +87,7 @@ void complex_matrix::increment(size_t x, size_t y, complex value)
     _data[(x - 1) + _width * (y - 1)] = _data[(x - 1) + _width * (y - 1)] + value;
 }
 
-const std::vector<complex> complex_matrix::get_column(size_t x)
+std::vector<complex> complex_matrix::get_column(size_t x) const
 {
     std::vector<complex> output(_height);
     for (size_t i = 0; i < _height; i++)
@@ -97,7 +97,7 @@ const std::vector<complex> complex_matrix::get_column(size_t x)
     return output;
 }
 
-const std::vector<complex> complex_matrix::get_line(size_t y)
+std::vector<complex> complex_matrix::get_line(size_t y) const
 {
     std::vector<complex> output(_width);
     for (size_t i = 0; i < _width; i++)
@@ -124,7 +124,7 @@ void complex_matrix::set_line(std::vector<complex> data, size_t y)
     }
 }
 
-const image complex_matrix::real_part_to_image()
+image complex_matrix::real_part_to_image() const
 {
     image im(_width, _height);
     for (size_t i = 1; i <= _width; i++)
@@ -137,7 +137,7 @@ const image complex_matrix::real_part_to_image()
     return im;
 }
 
-const image complex_matrix::imag_part_to_image()
+image complex_matrix::imag_part_to_image() const
 {
     image im(_width, _height);
     for (size_t i = 1; i <= _width; i++)
@@ -150,7 +150,7 @@ const image complex_matrix::imag_part_to_image()
     return im;
 }
 
-const image complex_matrix::modulus_to_image()
+image complex_matrix::modulus_to_image() const
 {
     image im(_width, _height);
     for (size_t i = 1; i <= _width; i++)
@@ -163,7 +163,7 @@ const image complex_matrix::modulus_to_image()
     return im;
 }
 
-const image complex_matrix::phase_to_image()
+image complex_matrix::phase_to_image() const
 {
     image im(_width, _height);
     for (size_t i = 1; i <= _width; i++)

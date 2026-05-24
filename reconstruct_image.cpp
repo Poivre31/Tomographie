@@ -75,8 +75,9 @@ int main()
     }
 
     std::cout << "Filtering frequencies and computing inverse fourier transform" << std::endl;
-
-    double dn = n_sensor / 4.;
+    std::cout << "Reconstructed image in " << timer::get_ellapsed_time() << "ms\n"
+              << std::endl;
+    double dn = n_sensor / 2.;
     auto polar_ram_lak = weight_data_ram_lak(polar, dn);
     auto polar_shepp_logan = weight_data_shepp_logan(polar, dn);
     auto polar_hanning = weight_data_hanning(polar, dn);
@@ -91,7 +92,7 @@ int main()
     //           << "  Shepp Logan: " << mssim(result_shepp_logan, phantom) << "dB\n"
     //           << "  Hanning: " << mssim(result_hanning, phantom) << "dB\n";
 
-    std::cout << "Reconstructed image in " << timer::get_ellapsed_time() << "ms\n"
+    std::cout << "### Reconstructed image in " << timer::get_ellapsed_time() << "ms ###\n"
               << std::endl;
 
     display_images({

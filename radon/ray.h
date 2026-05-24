@@ -36,17 +36,17 @@ public:
         _origin += off;
     }
 
-    vec2 at_distance(double t)
+    vec2 at_distance(double t) const
     {
         return _origin + t * _dir;
     }
 
-    vec2 origin()
+    vec2 origin() const
     {
         return _origin;
     }
 
-    vec2 direction()
+    vec2 direction() const
     {
         return _dir;
     }
@@ -57,7 +57,7 @@ public:
         _dir = {-sin(theta), cos(theta)};
     }
 
-    double x_intersect_distance(double y_coord)
+    double x_intersect_distance(double y_coord) const
     {
         if (_dir.y == 0.)
             return 0.;
@@ -65,7 +65,7 @@ public:
             return (y_coord - _origin.y) / _dir.y;
     }
 
-    double y_intersect_distance(double x_coord)
+    double y_intersect_distance(double x_coord) const
     {
         if (_dir.x == 0.)
             return 0.;

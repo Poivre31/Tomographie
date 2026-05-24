@@ -41,6 +41,36 @@ target_link_libraries(sinogram PRIVATE lib)
 add_executable(reconstruct reconstruct_image.cpp)
 target_link_libraries(reconstruct PRIVATE lib)
 
+# add_executable(gui gui.cpp)
+# target_include_directories(gui PRIVATE extern/imgui extern/imgui/backends)
+# target_sources(gui PRIVATE
+#     extern/imgui/imgui.cpp
+#     extern/imgui/imgui_demo.cpp
+#     extern/imgui/imgui_draw.cpp
+#     extern/imgui/imgui_tables.cpp
+#     extern/imgui/imgui_widgets.cpp
+#     extern/imgui/imconfig.h
+#     extern/imgui/imgui.h
+#     extern/imgui/imgui_internal.h
+#     extern/imgui/imstb_rectpack.h
+#     extern/imgui/imstb_textedit.h
+#     extern/imgui/imstb_truetype.h
+
+#     extern/imgui/backends/imgui_impl_sdl2.cpp
+#     extern/imgui/backends/imgui_impl_opengl3.cpp
+
+# )
+
+# find_package(X11 REQUIRED)
+# find_package(SDL2 REQUIRED)
+# find_package(OpenGL REQUIRED)
+
+# target_link_libraries(gui PUBLIC
+#     SDL2::SDL2
+#     OpenGL::GL
+#     ${X11_LIBRARIES}
+# )
+
 target_include_directories(lib PRIVATE data math radon utility)
 target_include_directories(sinogram PRIVATE data math radon utility)
 target_include_directories(reconstruct PRIVATE data math radon utility)
@@ -48,21 +78,3 @@ target_include_directories(reconstruct PRIVATE data math radon utility)
 target_compile_options(lib PUBLIC -O3 -march=native -flto)
 target_compile_options(sinogram PUBLIC -O3 -march=native -flto)
 target_compile_options(reconstruct PUBLIC -O3 -march=native -flto)
-
-# add_executable(Sinogram generate_sinogram.cpp
-#     math/my_dft.cpp)
-# target_link_libraries(Sinogram PRIVATE lib)
-
-# add_executable(Reconstuction reconstruct_image.cpp)
-# target_link_libraries(Reconstuction PRIVATE lib)
-
-# target_include_directories(Reconstuction PUBLIC data math radon utility)
-# target_compile_options(Reconstuction PUBLIC -O3 -march=native -flto)
-
-# if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-#     target_link_options(IRM PUBLIC
-#         -flto
-#         -fuse-ld=lld
-#     )
-# elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-# endif()

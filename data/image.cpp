@@ -16,7 +16,7 @@ image::image(size_t width, size_t height) : _width(width), _height(height)
     }
 }
 
-const image image::copy()
+image image::copy() const
 {
     image result(_width, _height);
     for (size_t x = 1; x <= _width; x++)
@@ -38,7 +38,7 @@ size_t image::height()
     return _height;
 }
 
-const double image::get(size_t x, size_t y)
+double image::get(size_t x, size_t y) const
 {
     if (x < 1 || x > _width || y < 1 || y > _height)
     {
@@ -69,7 +69,7 @@ void image::increment(size_t x, size_t y, double value)
 }
 
 /// @brief Returns the portion of the image from (x0,y0) included to (x1,y1) excluded.
-const image image::get_portion(size_t x0, size_t y0, size_t x1, size_t y1)
+image image::get_portion(size_t x0, size_t y0, size_t x1, size_t y1) const
 {
     size_t width = x1 - x0;
     size_t height = y1 - y0;
@@ -79,7 +79,7 @@ const image image::get_portion(size_t x0, size_t y0, size_t x1, size_t y1)
     return result;
 }
 
-const std::vector<double> image::get_column(size_t x)
+std::vector<double> image::get_column(size_t x) const
 {
     std::vector<double> output(_height);
     for (size_t i = 0; i < _height; i++)
@@ -89,7 +89,7 @@ const std::vector<double> image::get_column(size_t x)
     return output;
 }
 
-const std::vector<double> image::get_line(size_t y)
+std::vector<double> image::get_line(size_t y) const
 {
     std::vector<double> output(_width);
     for (size_t i = 0; i < _width; i++)
@@ -116,7 +116,7 @@ void image::set_line(std::vector<double> data, size_t y)
     }
 }
 
-const void image::save(std::string path)
+void image::save(std::string path) const
 {
     if (!_data.get())
     {

@@ -39,7 +39,7 @@ int main()
         else if (shape == "rectangle")
             phantom.fill_rectangle(1, n_image / 2, n_image / 2, n_image / 4, n_image / 2);
     }
-    std::cout << "Computing image's sinogram" << std::endl;
+    std::cout << "Computing image's sinogram:" << std::endl;
 
     double image_scale = cfg.image_size / n_image;        // mm per pixel
     double sensor_scale = cfg.sensor_size / cfg.n_sensor; // mm per pixel
@@ -47,8 +47,10 @@ int main()
 
     phantom.save("phantom");
     projection.save("sinogram");
-    display_images({phantom, projection});
+    std::cout << "Time projecting: " << timer::get_ellapsed_time("project") << "ms\n";
 
-    std::cout << "Computed sinogram in " << timer::get_ellapsed_time() << "ms\n"
+    std::cout << "### Computed sinogram in " << timer::get_ellapsed_time() << "ms ###\n"
               << std::endl;
+
+    display_images({phantom, projection});
 }

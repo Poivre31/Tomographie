@@ -12,7 +12,7 @@ class complex_matrix
 public:
     complex_matrix(size_t width, size_t height);
     complex_matrix(image im);
-    const complex_matrix copy();
+    complex_matrix copy() const;
 
     size_t width();
 
@@ -21,7 +21,7 @@ public:
     /// @brief Returns the pixel value at (`x`,`y`)
     /// @param x horizontal position, from one to width / left to right
     /// @param y vertical position, from one to height / top to bottom
-    const complex get(size_t x, size_t y);
+    complex get(size_t x, size_t y) const;
 
     /// @brief Sets the pixel value at (`x`,`y`) to `value`
     /// @param x horizontal position, from one to width / left to right
@@ -33,18 +33,18 @@ public:
     /// @param y vertical position, from one to height / top to bottom
     void increment(size_t x, size_t y, complex value);
 
-    const std::vector<complex> get_column(size_t x);
-    const std::vector<complex> get_line(size_t y);
+    std::vector<complex> get_column(size_t x) const;
+    std::vector<complex> get_line(size_t y) const;
     void set_column(std::vector<complex> data, size_t x);
     void set_line(std::vector<complex> data, size_t y);
 
-    const image real_part_to_image();
+    image real_part_to_image() const;
 
-    const image imag_part_to_image();
+    image imag_part_to_image() const;
 
-    const image modulus_to_image();
+    image modulus_to_image() const;
 
-    const image phase_to_image();
+    image phase_to_image() const;
 
     void apply_elementwise(std::function<complex(complex)> f);
 

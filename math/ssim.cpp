@@ -16,7 +16,7 @@ double weighted_mean(image im, image weight)
         return 0.;
     }
     double sum = 0;
-    im.apply_elementwise([&sum, &weight](size_t i, size_t j, double v)
+    im.apply_elementwise([&sum, weight](size_t i, size_t j, double v)
                          {sum+=weight.get(i,j)*v;return v; });
     return sum;
 }
@@ -40,7 +40,7 @@ double weighted_variance(image im, image weight)
     }
     double mean = weighted_mean(im, weight);
     double variance = 0;
-    im.apply_elementwise([&variance, mean, &weight](size_t i, size_t j, double v)
+    im.apply_elementwise([&variance, mean, weight](size_t i, size_t j, double v)
                          {variance+=weight.get(i,j)*(v-mean)*(v-mean); return v; });
 
     return variance;
