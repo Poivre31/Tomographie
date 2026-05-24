@@ -3,7 +3,7 @@
 #include <vector>
 #include <algorithm>
 #include <cmath>
-#include "my_math.h"
+#include "vec2.h"
 
 struct vec2i
 {
@@ -50,11 +50,6 @@ public:
     {
         return _dir;
     }
-#include "image.h"
-#include <vector>
-#include <algorithm>
-#include <cmath>
-#include "my_math.h"
 
     void set_from_distance_angle(double s, double theta)
     {

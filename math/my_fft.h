@@ -1,5 +1,6 @@
 #pragma once
 #include "my_dft.h"
+#include "timer.h"
 
 template <typename T>
 std::vector<complex> fft(std::vector<T> data, bool recurrence = false)

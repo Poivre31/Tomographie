@@ -2,7 +2,7 @@
 #include "timer.h"
 #include "save.h"
 #include "my_fft.h"
-#include "my_math.h"
+#include "vec2.h"
 #include "projection.h"
 
 void exemple_fft_1D(size_t n, size_t a)

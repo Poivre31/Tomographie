@@ -1,9 +1,8 @@
 #pragma once
 #include "image.h"
 #include <cmath>
-#include "ssim.h"
 
-double psnr(image im1, image im2, double max_i)
+inline double psnr(image im1, image im2, double max_i)
 {
     if (im1.width() != im2.width() || im1.height() != im2.height())
     {

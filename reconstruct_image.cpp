@@ -7,38 +7,30 @@
 #include "bilinear_interp.h"
 #include "psnr.h"
 #include <format>
-#include "my_fft.h"
-#include "save.h"
 #include "ssim.h"
-
-double image_size = 600;         // Physical size of the image in mm
-size_t n_image = 512;            // Number of pixels of the representation of the image used to compute the projection
-size_t n_sensor = 512;           // Number of pixels in the physical sensor
-double sensor_size = image_size; // Physical size of the sensor
-size_t n_projections = 1024;     // Number of projections
-double theta0 = 0;
+#include "config.h"
 
 int main()
 {
     timer::start_watch();
-    double image_scale = image_size / n_image;    // mm per pixel
-    double sensor_scale = sensor_size / n_sensor; // mm per pixel
-    image phantom(n_image, n_image);
+    config cfg = get_config();
+    size_t n_image = cfg.n_image;
+    size_t n_sensor = cfg.n_sensor;
+    size_t n_projections = cfg.n_projections;
 
-    // phantom.fill_ellipse(1., n_image / 2 + 1, n_image / 2 + 1, n_image / 2, n_image / 2);
-    // phantom.fill_rectangle(1, n_image / 2, n_image / 2, 1. * n_image, 1. * n_image);
-    phantom.fill_phantom(n_image / 2, n_image / 2, .5 * n_image, true);
+    std::cout << "### Reconstructing image ###" << std::endl;
+    std::cout << "Loading data" << std::endl;
+    auto phantom = load_image_txt("phantom.txt");
     auto phantom_fft = fft_2D(phantom);
-
-    auto projection = sinogram(phantom, image_scale, n_projections, n_sensor, sensor_scale);
-    // display_image(projection);
-    // add_photon_noise(projection, 10);
+    auto projection = load_image_txt("sinogram.txt");
 
     complex_matrix fft_1(n_sensor, n_projections);
     for (size_t s = 1; s <= n_projections; s++)
     {
+        std::cout << "\r\33[KComputing fourier slices (" << round(100. * s / (n_projections - 1)) << "%)" << std::flush;
         fft_1.set_line(fft(projection.get_line(s)), s);
     }
+    std::cout << std::endl;
 
     complex_matrix polar(n_image, n_image);
     image weight(n_image, n_image);
@@ -46,7 +38,8 @@ int main()
     for (size_t t = 0; t < n_projections; t++)
     {
         auto v = fft_1.get_line(t + 1);
-        double theta = 2 * M_PI * t / n_projections + theta0;
+        double theta = 2 * M_PI * t / n_projections;
+        std::cout << "\r\33[KInterpolating polar slices onto cardesian grid (" << round(100. * t / (n_projections - 1)) << "%)" << std::flush;
         for (size_t i = 0; i < n_sensor; i++)
         {
             double d = (i - n_sensor / 2.);
@@ -70,6 +63,7 @@ int main()
             // weight.increment(floor(x), floor(y), 1);
         }
     }
+    std::cout << std::endl;
 
     for (size_t i = 1; i <= n_image; i++)
     {
@@ -80,8 +74,9 @@ int main()
         }
     }
 
-    // double dn = std::min(n_sensor / 2., n_sensor * sensor_scale * n_projections / (2 * M_PI * image_size));
-    double dn = n_sensor / 2.;
+    std::cout << "Filtering frequencies and computing inverse fourier transform" << std::endl;
+
+    double dn = n_sensor / 4.;
     auto polar_ram_lak = weight_data_ram_lak(polar, dn);
     auto polar_shepp_logan = weight_data_shepp_logan(polar, dn);
     auto polar_hanning = weight_data_hanning(polar, dn);
@@ -91,30 +86,26 @@ int main()
     auto result_shepp_logan = ffti_2D(polar_shepp_logan).modulus_to_image();
     auto result_hanning = ffti_2D(polar_hanning).modulus_to_image();
 
-    std::cout << "Reconstruction quality (log scale SSIM): \n  Raw: " << mssim(result_raw, phantom) << "dB\n"
-              << "  Ram Lak: " << mssim(result_ram_lak, phantom) << "dB\n"
-              << "  Shepp Logan: " << mssim(result_shepp_logan, phantom) << "dB\n"
-              << "  Hanning: " << mssim(result_hanning, phantom) << "dB\n";
+    // std::cout << "Reconstruction quality (log scale SSIM): \n  Raw: " << mssim(result_raw, phantom) << "dB\n"
+    //           << "  Ram Lak: " << mssim(result_ram_lak, phantom) << "dB\n"
+    //           << "  Shepp Logan: " << mssim(result_shepp_logan, phantom) << "dB\n"
+    //           << "  Hanning: " << mssim(result_hanning, phantom) << "dB\n";
 
-    timer::print_ellapsed_time("project");
-    timer::print_ellapsed_time();
+    std::cout << "Reconstructed image in " << timer::get_ellapsed_time() << "ms\n"
+              << std::endl;
 
     display_images({
-                       fft_1.modulus_to_image(),
                        phantom_fft.modulus_to_image(),
                        polar.modulus_to_image(),
-                       polar_ram_lak.modulus_to_image(),
                        polar_shepp_logan.modulus_to_image(),
                        polar_hanning.modulus_to_image(),
                    },
-                   3);
+                   4);
     display_images({
                        phantom,
                        result_raw,
-                       result_ram_lak,
                        result_shepp_logan,
                        result_hanning,
                    },
                    1.);
-    timer::print_ellapsed_time("fft");
 }

@@ -2,7 +2,7 @@
 #include <tuple>
 #include <cmath>
 
-std::tuple<size_t, size_t, size_t, size_t, double, double, double, double> bilinear_weights(image im, double x, double y)
+inline std::tuple<size_t, size_t, size_t, size_t, double, double, double, double> bilinear_weights(image im, double x, double y)
 {
     size_t x1 = floor(x);
     size_t y1 = floor(y);
@@ -23,7 +23,7 @@ std::tuple<size_t, size_t, size_t, size_t, double, double, double, double> bilin
     return std::make_tuple(x1, x2, y1, y2, w11, w12, w21, w22);
 }
 
-double bilinear_interpolation(image im, double x, double y)
+inline double bilinear_interpolation(image im, double x, double y)
 {
     auto [x1, x2, y1, y2, w11, w12, w21, w22] = bilinear_weights(im, x, y);
     return w11 * im.get(x1, y1) + w12 * im.get(x1, y2) + w21 * im.get(x2, y1) + w22 * im.get(x2, y2);

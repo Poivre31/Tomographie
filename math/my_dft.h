@@ -1,6 +1,5 @@
 #pragma once
 #include <vector>
-#include "my_math.h"
 #include "complex.h"
 #include "complex_matrix.h"
 
@@ -96,27 +95,3 @@ std::vector<complex> dfti(std::vector<T> data, bool normalize = true)
 
     return result;
 }
-
-// complex_matrix dft_2D(complex_matrix data)
-// {
-//     size_t N = data.width();
-//     size_t M = data.height();
-//     complex_matrix result(N, M);
-//     for (size_t k = 1; k <= N; k++)
-//     {
-//         for (size_t l = 1; l <= M; l++)
-//         {
-//             complex value = 0;
-//             for (size_t n = 1; n <= N; n++)
-//             {
-//                 for (size_t m = 1; m <= M; m++)
-//                 {
-//                     value += data.get(m, n) * exp(-2 * (M_PI * (k - 1) * (m - 1) / M + M_PI * (l - 1) * (n - 1) / N) * 1i);
-//                 }
-//             }
-//             result.set(k, l, value);
-//         }
-//     }
-
-//     return result;
-// }

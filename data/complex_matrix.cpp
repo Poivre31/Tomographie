@@ -1,4 +1,5 @@
 #include "complex_matrix.h"
+#include "complex.h"
 
 complex_matrix::complex_matrix(size_t width, size_t height) : _width(width), _height(height)
 {

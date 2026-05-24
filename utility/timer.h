@@ -63,6 +63,23 @@ public:
         }
     }
 
+    static double get_ellapsed_time(const char *name = "global")
+    {
+        auto t = high_resolution_clock::now();
+        if (!watches.contains(name))
+        {
+            std::cout << "ERROR: trying to get the time of a watch that hasn't been created" << std::endl;
+            return 0.;
+        }
+        else
+        {
+            double dt = watches.at(name).offset;
+            if (watches.at(name).running)
+                dt += duration_cast<nanoseconds>(t - watches.at(name).t0).count() * .000001;
+            return dt;
+        }
+    }
+
 private:
     static inline std::unordered_map<std::string, timer_data> watches;
 };

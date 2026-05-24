@@ -1,4 +1,5 @@
 #include "image.h"
+#include "timer.h"
 
 image::image(size_t width, size_t height) : _width(width), _height(height)
 {
