@@ -32,6 +32,7 @@ add_library(lib STATIC
     utility/save.h
     utility/timer.h
     utility/config.h
+    utility/exemples.h
 )
 
 
@@ -40,6 +41,9 @@ target_link_libraries(sinogram PRIVATE lib)
 
 add_executable(reconstruct reconstruct_image.cpp)
 target_link_libraries(reconstruct PRIVATE lib)
+
+add_executable(validation validation.cpp)
+target_link_libraries(validation PRIVATE lib)
 
 # add_executable(gui gui.cpp)
 # target_include_directories(gui PRIVATE extern/imgui extern/imgui/backends)
@@ -74,7 +78,9 @@ target_link_libraries(reconstruct PRIVATE lib)
 target_include_directories(lib PRIVATE data math radon utility)
 target_include_directories(sinogram PRIVATE data math radon utility)
 target_include_directories(reconstruct PRIVATE data math radon utility)
+target_include_directories(validation PRIVATE data math radon utility)
 
 target_compile_options(lib PUBLIC -O3 -march=native -flto)
 target_compile_options(sinogram PUBLIC -O3 -march=native -flto)
 target_compile_options(reconstruct PUBLIC -O3 -march=native -flto)
+target_compile_options(validation PUBLIC -O3 -march=native -flto)

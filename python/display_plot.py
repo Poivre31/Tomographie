@@ -10,6 +10,9 @@ x = np.empty(n)
 for i in range(n):
     x[i] = float(data.readline())
 
+title = str(sys.argv[2])
+
 
 plt.plot(x)
+plt.title(title)
 plt.show()

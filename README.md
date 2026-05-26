@@ -65,7 +65,7 @@ Les executions du programme suivantes utiliserons alors ces parametres.
 
 Pour executer un des scripts, il faut d'abord donner l'autorisation d'execution. Depuis le dossier principal:
 ```sh
-sudo chmod run 755 -R
+chmod 755 run -R
 ```
 Puis simplement executer le script depuis le dossier run. Par exemple, pour compiler puis calculer le sinograme et la reconstruction:
 ```

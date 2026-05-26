@@ -21,8 +21,7 @@ void exemple_fft_1D(size_t n, size_t a)
 
     timer::print_ellapsed_time("exemple");
     // display_plot(aperture);
-    display_plot(real(datafft));
-    display_plot(real(ifft));
+    display_plot(real(datafft), "'Real part of FFT of gate function'");
 }
 
 void exemple_fft_2D(size_t n, size_t a)
@@ -42,10 +41,10 @@ void exemple_fft_2D(size_t n, size_t a)
     }
 
     auto im = fft_2D(aperture);
-    auto ifft = ffti_2D(im).real_part_to_image();
+    auto ifft = ffti_2D(im);
 
     timer::print_ellapsed_time("exemple");
-    display_images({im.real_part_to_image(), ifft}, 2.2);
+    display_images({aperture.real_part_to_image(), im.modulus_to_image(), ifft.modulus_to_image()}, {"'Aperture function'", "'Modulus of 2D FFT of the aperture'", "'Inverse transform of the FFT'"}, 2.2);
 }
 
 void visualize_intersections(size_t width, size_t height)
@@ -69,5 +68,5 @@ void visualize_intersections(size_t width, size_t height)
         file << xy.y << "\n";
     }
     file.close();
-    auto error = system("python ../display_scatter.py");
+    auto error = system("python python/display_scatter.py data.txt");
 }

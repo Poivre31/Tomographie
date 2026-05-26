@@ -1,2 +1,2 @@
-./compute_sinogram.sh
-./reconstruct_image.sh
+./run_compute_sinogram.sh
+./run_reconstruct_image.sh

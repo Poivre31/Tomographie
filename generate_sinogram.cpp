@@ -52,5 +52,5 @@ int main()
     std::cout << "### Computed sinogram in " << timer::get_ellapsed_time() << "ms ###\n"
               << std::endl;
 
-    display_images({phantom, projection});
+    display_images({phantom, projection}, {"'Reference image'", "'Computed sinogram'"});
 }

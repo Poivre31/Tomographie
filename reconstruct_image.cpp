@@ -100,12 +100,24 @@ int main()
                        polar_shepp_logan.modulus_to_image(),
                        polar_hanning.modulus_to_image(),
                    },
+                   {
+                       "'Spectrum of reference image'",
+                       "'Spectrum of reconstructed image'",
+                       "'Spectrum of Shepp-Logan filtered image'"
+                       "'Spectrum of Hann filtered image'",
+                   },
                    4);
     display_images({
                        phantom,
                        result_raw,
                        result_shepp_logan,
                        result_hanning,
+                   },
+                   {
+                       "'Reference image'",
+                       "'Reconstructed image'",
+                       "'Shepp-Logan filtered image'"
+                       "'Hann filtered image'",
                    },
                    1.);
 
