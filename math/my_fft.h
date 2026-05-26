@@ -6,6 +6,7 @@ template <typename T>
 std::vector<complex> fft(std::vector<T> data, bool recurrence = false)
 {
     size_t N = data.size();
+
     std::vector<complex> result(N);
     if (!(N && (N && (N - 1))))
     {
@@ -19,11 +20,10 @@ std::vector<complex> fft(std::vector<T> data, bool recurrence = false)
         data = fft_shift(data);
     }
 
+    if (N == 1)
+        return {data[0]};
     if (N == 2)
-    {
-
         return dft(data);
-    }
 
     else
     {
@@ -48,6 +48,7 @@ template <typename T>
 std::vector<complex> ffti(std::vector<T> data, bool recurrence = false)
 {
     size_t N = data.size();
+
     std::vector<complex> result(N);
     if (!(N && (N && (N - 1))))
     {
@@ -66,10 +67,10 @@ std::vector<complex> ffti(std::vector<T> data, bool recurrence = false)
         data = fft_shift(data);
     }
 
+    if (N == 1)
+        return data;
     if (N == 2)
-    {
         return dfti(data, false);
-    }
 
     else
     {

@@ -33,7 +33,9 @@ image load_image_png(std::string path)
         std::cout << "ERROR :only loads .png images" << std::endl;
         return image(0, 0);
     }
-    system((std::string("python3 ../python/convert_png.py ") + img_path.replace_extension("").c_str()).data());
+    int error = system((std::string("python3 ../python/convert_png.py ") + img_path.replace_extension("").string()).data());
+    if (error)
+        std::cout << "ERROR: python image loading failed" << std::endl;
     std::ifstream img_data(img_path.replace_extension(".txt"));
     size_t width, height;
     img_data >> width;

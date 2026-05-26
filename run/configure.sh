@@ -10,7 +10,7 @@ echo "Physical size of the image:"
 read IM_SIZE
 echo $IM_SIZE >> config.txt
 
-echo "Pixel size of the image (for generated images only, must be power of 2):"
+echo "Pixel size of the image, for generated images only (must be power of 2):"
 read IM_PIX
 echo $IM_PIX >> config.txt
 

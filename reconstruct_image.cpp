@@ -13,16 +13,16 @@
 int main()
 {
     timer::start_watch();
-    config cfg = get_config();
-    size_t n_image = cfg.n_image;
-    size_t n_sensor = cfg.n_sensor;
-    size_t n_projections = cfg.n_projections;
 
     std::cout << "### Reconstructing image ###" << std::endl;
     std::cout << "Loading data" << std::endl;
     auto phantom = load_image_txt("phantom.txt");
     auto phantom_fft = fft_2D(phantom);
     auto projection = load_image_txt("sinogram.txt");
+
+    size_t n_image = phantom.width();
+    size_t n_sensor = projection.width();
+    size_t n_projections = projection.height();
 
     complex_matrix fft_1(n_sensor, n_projections);
     for (size_t s = 1; s <= n_projections; s++)
@@ -32,8 +32,8 @@ int main()
     }
     std::cout << std::endl;
 
-    complex_matrix polar(n_image, n_image);
-    image weight(n_image, n_image);
+    complex_matrix polar(n_sensor, n_sensor);
+    image weight(n_sensor, n_sensor);
 
     for (size_t t = 0; t < n_projections; t++)
     {
@@ -44,8 +44,8 @@ int main()
         {
             double d = (i - n_sensor / 2.);
 
-            double x = n_image / 2. + cos(theta) * d + 1;
-            double y = n_image / 2. + sin(theta) * d + 1;
+            double x = n_sensor / 2. + cos(theta) * d + 1;
+            double y = n_sensor / 2. + sin(theta) * d + 1;
 
             auto [x1, x2, y1, y2, w11, w12, w21, w22] = bilinear_weights(phantom, x, y);
             // polar.set(floor(x) - 1, floor(y) - 1, x - 1);
@@ -65,9 +65,9 @@ int main()
     }
     std::cout << std::endl;
 
-    for (size_t i = 1; i <= n_image; i++)
+    for (size_t i = 1; i <= n_sensor; i++)
     {
-        for (size_t j = 1; j <= n_image; j++)
+        for (size_t j = 1; j <= n_sensor; j++)
         {
             if (weight.get(i, j) != 0)
                 polar.set(i, j, polar.get(i, j) / weight.get(i, j));
@@ -75,8 +75,7 @@ int main()
     }
 
     std::cout << "Filtering frequencies and computing inverse fourier transform" << std::endl;
-    std::cout << "Reconstructed image in " << timer::get_ellapsed_time() << "ms\n"
-              << std::endl;
+
     double dn = n_sensor / 2.;
     auto polar_ram_lak = weight_data_ram_lak(polar, dn);
     auto polar_shepp_logan = weight_data_shepp_logan(polar, dn);
@@ -109,4 +108,6 @@ int main()
                        result_hanning,
                    },
                    1.);
+
+    std::cout << "Time spent doing FFT " << timer::get_ellapsed_time("fft") << "ms" << std::endl;
 }

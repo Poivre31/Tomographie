@@ -6,7 +6,7 @@ std::vector<double> grid_intersects(size_t width, size_t height, ray r)
     vec2 intersect_1;
     vec2 intersect_2;
 
-    // To refactor
+    // Non optimal intersection code
     if (r.direction().x != 0 && r.direction().y != 0)
     {
         double x_top = r.at_distance(r.x_intersect_distance(0)).x;
@@ -88,11 +88,15 @@ std::vector<double> grid_intersects(size_t width, size_t height, ray r)
     {
         vertical.push_back(r.y_intersect_distance(x));
     }
+    // Depending on the situation, at this point the distances array will be sorted in either ascending or descing order.
+    // This ensures they are both sorted in ascending order
     if (!std::is_sorted(horizontal.begin(), horizontal.end()))
         std::reverse(horizontal.begin(), horizontal.end());
     if (!std::is_sorted(vertical.begin(), vertical.end()))
         std::reverse(vertical.begin(), vertical.end());
+
     distances.resize(horizontal.size() + vertical.size());
+    // So they can be sorted into a sorted list of distances
     std::merge(horizontal.begin(), horizontal.end(), vertical.begin(), vertical.end(), distances.begin());
     return distances;
 }
