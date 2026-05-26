@@ -100,6 +100,7 @@ void display_images(std::vector<image> images, std::vector<std::string> titles, 
     {
         command += std::to_string(gamma) + " ";
     }
+
     auto error = system(command.data());
     if (error)
         std::cout << "Python execution failed (trying to display image)" << std::endl;

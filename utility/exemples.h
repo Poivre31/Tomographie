@@ -68,5 +68,5 @@ void visualize_intersections(size_t width, size_t height)
         file << xy.y << "\n";
     }
     file.close();
-    auto error = system("python python/display_scatter.py data.txt");
+    auto error = system("python ../python/display_scatter.py data.txt");
 }

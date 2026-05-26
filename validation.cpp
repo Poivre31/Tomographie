@@ -5,5 +5,5 @@ int main()
 {
     exemple_fft_1D(1024, 32);
     exemple_fft_2D(1024, 32);
-    visualize_intersections(20, 30);
+    system("python ../python/intersects.py");
 }

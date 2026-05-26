@@ -48,7 +48,6 @@ int main()
             double y = n_sensor / 2. + sin(theta) * d + 1;
 
             auto [x1, x2, y1, y2, w11, w12, w21, w22] = bilinear_weights(phantom, x, y);
-            // polar.set(floor(x) - 1, floor(y) - 1, x - 1);
 
             polar.increment(x1, y1, v[i] * w11);
             weight.increment(x1, y1, w11);
@@ -58,9 +57,6 @@ int main()
             weight.increment(x2, y1, w21);
             polar.increment(x2, y2, v[i] * w22);
             weight.increment(x2, y2, w22);
-
-            // polar.increment(floor(x), floor(y), v[i]);
-            // weight.increment(floor(x), floor(y), 1);
         }
     }
     std::cout << std::endl;
@@ -86,11 +82,6 @@ int main()
     auto result_shepp_logan = ffti_2D(polar_shepp_logan).modulus_to_image();
     auto result_hanning = ffti_2D(polar_hanning).modulus_to_image();
 
-    // std::cout << "Reconstruction quality (log scale SSIM): \n  Raw: " << mssim(result_raw, phantom) << "dB\n"
-    //           << "  Ram Lak: " << mssim(result_ram_lak, phantom) << "dB\n"
-    //           << "  Shepp Logan: " << mssim(result_shepp_logan, phantom) << "dB\n"
-    //           << "  Hanning: " << mssim(result_hanning, phantom) << "dB\n";
-
     std::cout << "### Reconstructed image in " << timer::get_ellapsed_time() << "ms ###\n"
               << std::endl;
 
@@ -103,7 +94,7 @@ int main()
                    {
                        "'Spectrum of reference image'",
                        "'Spectrum of reconstructed image'",
-                       "'Spectrum of Shepp-Logan filtered image'"
+                       "'Spectrum of Shepp-Logan filtered image'",
                        "'Spectrum of Hann filtered image'",
                    },
                    4);
@@ -116,10 +107,8 @@ int main()
                    {
                        "'Reference image'",
                        "'Reconstructed image'",
-                       "'Shepp-Logan filtered image'"
+                       "'Shepp-Logan filtered image'",
                        "'Hann filtered image'",
                    },
                    1.);
-
-    std::cout << "Time spent doing FFT " << timer::get_ellapsed_time("fft") << "ms" << std::endl;
 }

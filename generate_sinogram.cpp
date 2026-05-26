@@ -35,7 +35,7 @@ int main()
         if (shape == "shepp-logan")
             phantom.fill_phantom(n_image / 2, n_image / 2, .5 * n_image, true);
         else if (shape == "ellipse")
-            phantom.fill_ellipse(1., n_image / 2 + 1, n_image / 2 + 1, n_image / 4, n_image / 8);
+            phantom.fill_ellipse(1., n_image / 2 + 1, n_image / 2 + 1, n_image / 4, n_image / 4);
         else if (shape == "rectangle")
             phantom.fill_rectangle(1, n_image / 2, n_image / 2, n_image / 4, n_image / 2);
     }
