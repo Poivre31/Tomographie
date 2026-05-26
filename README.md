@@ -21,7 +21,7 @@
 
 Dans de nombreux domaines (astrophysique, géophysique et tout particulièrement l'imagerie médicale), il est impossible de mesurer de manière directe une grandeur à l'intérieur d'un objet. Soit parce que cet objet est trop éloigné (astrophysique), soit parce qu'on ne peut pas creuser son intérieur (géophysique), ou encore parce qu'on pourrait le faire... mais qu'on préfère l'éviter ! (médical).
 
-Dans ce contexte, la tomographie permet de reconstruire l'intérieur de cet objet à partir de mesures effectuées depuis l'extérieur. Par exemple, les géophysiciens ont accès aux données sismologiques, qui sont directement influencées par la structure de la Terre. Dans le domaine médical, plusieurs méthodes d'imagerie (IRM, scanners à rayons X) permettent de mesurer des projections à travers l'organisme. L'enjeu est alors de reconstruire l'intérieur de l'objet à partir de ces mesures. C'est un problème inverse complexe qui suscite l'intérêt de nombreux chercheurs. L'un des résultats fondamentaux en tomographie est le **théorème de la tranche centrale de Fourier**, qui relie le sinogramme (l'ensemble des projections mesurées) à l'objet initial via la transformation de Fourier.
+Dans ce contexte, la tomographie permet de reconstruire l'intérieur de cet objet à partir de mesures effectuées depuis l'extérieur. Par exemple, les géophysiciens ont accès aux données sismologiques, qui sont directement influencées par la structure de la Terre. Dans le domaine médical, plusieurs méthodes d'imagerie (scanners à rayons X) permettent de mesurer des projections à travers l'organisme. L'enjeu est alors de reconstruire l'intérieur de l'objet à partir de ces mesures. C'est un problème inverse complexe qui suscite l'intérêt de nombreux chercheurs. L'un des résultats fondamentaux en tomographie est le **théorème de la tranche centrale de Fourier**, qui relie le sinogramme (l'ensemble des projections mesurées) à l'objet initial via la transformation de Fourier.
 
 Le but de ce projet est, dans un premier temps, de simuler les données obtenues par un appareil tomographique. Ici, la projection pour un couple (angle, distance) donné — c'est-à-dire l'intégrale de la densité de l'objet selon le rayon associé — est calculée par la méthode des rectangles à pas variables. Les intersections du rayon avec la grille de pixels permettent de déterminer ces différents pas. Il est également possible d'affiner la simulation des données en y ajoutant différents types de bruits. 
 
@@ -34,6 +34,7 @@ Cette méthode présente un défi d'interpolation particulièrement intéressant
 
 Lorsque le nombre de projections est insuffisant (ce qui arrive fréquemment en raison des contraintes réelles), la reconstruction dans le domaine de Fourier est incomplète. Cela entraîne l'apparition d'artefacts de reconstruction dans le domaine spatial. Plusieurs méthodes permettent d'atténuer ce défaut, comme le filtrage par une fenêtre de Shepp-Logan ou de Hann, ainsi que l'acquisition compressée (*compressed sensing*). Cette dernière approche est au cœur des avancées récentes du domaine et sera implémentée prochainement.
 
+Ce projet est accompagné d'un rapport détaillé disponible [ici](resources/rapport_imagerie.pdf)
 
 ## Utiliser le projet
 
